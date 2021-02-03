@@ -554,7 +554,7 @@ var crashSwitched = false;               // 2.
 var titleTime;
 document.addEventListener('visibilitychange', function () {
   if (document.hidden) {
-    if (Math.random() < parseFloat()) {         // 3.
+    if (Math.random() < parseFloat(0.5)) {         // 3.
       crashSwitched = true;              // 2.a.
       document.title = '' + originalTitle;     // 1.a.
       clearTimeout(titleTime);
@@ -562,7 +562,7 @@ document.addEventListener('visibilitychange', function () {
   } else {
     if (crashSwitched == true) {
       crashSwitched = false;             // 2.b.
-      document.title = '' + originalTitle;   // 1.b.
+      document.title = 'NaN' + originalTitle;   // 1.b.
       titleTime = setTimeout(function () {
         document.title = originalTitle;  // 1.c.
       }, 2000);
