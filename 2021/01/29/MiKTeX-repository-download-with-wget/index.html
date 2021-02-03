@@ -20,19 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="且把浮名换了浅斟低唱">
-<meta property="og:type" content="website">
-<meta property="og:title" content="分类">
-<meta property="og:url" content="http://example.com/categories/index.html">
+  <meta name="description" content="MiKTeX 是 TeX 系统的主流发行版之一，由于其体积较小，编译过程中（on-the-fly）自动下载安装未安装宏包的特性，受到许多 LaTeXer 的青睐。很多中国的 LaTeXer 入门时使用的发行版 CTEX 套装即是封装 MiKTeX 而成。MiKTeX 最初是针对 Windows 系统开发，应该是考虑了 Windows 系统编码问题，因此，在被编译源文档中使用中文路径和文件名一般能够">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 wget 下载制作 MiKTeX 仓库的源">
+<meta property="og:url" content="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/index.html">
 <meta property="og:site_name" content="极客斋">
-<meta property="og:description" content="且把浮名换了浅斟低唱">
+<meta property="og:description" content="MiKTeX 是 TeX 系统的主流发行版之一，由于其体积较小，编译过程中（on-the-fly）自动下载安装未安装宏包的特性，受到许多 LaTeXer 的青睐。很多中国的 LaTeXer 入门时使用的发行版 CTEX 套装即是封装 MiKTeX 而成。MiKTeX 最初是针对 Windows 系统开发，应该是考虑了 Windows 系统编码问题，因此，在被编译源文档中使用中文路径和文件名一般能够">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-12-31T15:42:34.000Z">
-<meta property="article:modified_time" content="2020-12-31T15:43:45.039Z">
+<meta property="article:published_time" content="2021-01-29T04:52:47.000Z">
+<meta property="article:modified_time" content="2021-02-01T10:08:27.439Z">
 <meta property="article:author" content="Chennan ZHANG">
+<meta property="article:tag" content="LaTeX">
+<meta property="article:tag" content="MiKTeX">
+<meta property="article:tag" content="wget">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/categories/">
+<link rel="canonical" href="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/">
 
 
 <script id="page-configurations">
@@ -40,13 +43,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>分类 | 极客斋
-</title>
+  <title>使用 wget 下载制作 MiKTeX 仓库的源 | 极客斋</title>
   
 
 
@@ -156,51 +158,149 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
-          <div class="content page posts-expand">
+          <div class="content post posts-expand">
             
 
     
-    
-    
-    <div class="post-block" lang="zh-CN">
-      <header class="post-header">
-
-<h1 class="post-title" itemprop="name headline">分类
-</h1>
-
-<div class="post-meta">
   
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/">
 
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chennan ZHANG">
+      <meta itemprop="description" content="且把浮名换了浅斟低唱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极客斋">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 wget 下载制作 MiKTeX 仓库的源
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-29 12:52:47" itemprop="dateCreated datePublished" datetime="2021-01-29T12:52:47+08:00">2021-01-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-01 18:08:27" itemprop="dateModified" datetime="2021-02-01T18:08:27+08:00">2021-02-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">计算机技术</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>MiKTeX 是 TeX 系统的主流发行版之一，由于其体积较小，编译过程中（on-the-fly）自动下载安装未安装宏包的特性，受到许多 LaTeXer 的青睐。很多中国的 LaTeXer 入门时使用的发行版 CTEX 套装即是封装 MiKTeX 而成。MiKTeX 最初是针对 Windows 系统开发，应该是考虑了 Windows 系统编码问题，因此，在被编译源文档中使用中文路径和文件名一般能够正常编译（前提是源文档 <code>utf-8</code> 编码，<code>xelatex</code> 编译），这对于英文词汇量不足的中文用户相当友好，因此受到众多中文用户的欢迎。不过，对于中国用户来说，由于网络环境的因素，中国大陆的 CTAN 镜像源在 MikTeX 的 Console 中经常无法找到，这使得 on-the-fly 安装宏包的功能受到了限制。这个问题可以通过制作本地或局域网的仓库而得到解决。本文将简单介绍 wget 制作 MiKTeX 仓库源的方法。</p>
+<a id="more"></a>
+<h1 id="wget-介绍"><a class="markdownIt-Anchor" href="#wget-介绍"></a> wget 介绍</h1>
+<h2 id="简介"><a class="markdownIt-Anchor" href="#简介"></a> 简介</h2>
+<h2 id="wget-命令行主要参数"><a class="markdownIt-Anchor" href="#wget-命令行主要参数"></a> <code>wget</code> 命令行主要参数</h2>
+<h1 id="使用-wget-制作-miktex-仓库源"><a class="markdownIt-Anchor" href="#使用-wget-制作-miktex-仓库源"></a> 使用 wget 制作 MiKTeX 仓库源</h1>
+<h2 id="中国大陆主要的-ctan-镜像站点"><a class="markdownIt-Anchor" href="#中国大陆主要的-ctan-镜像站点"></a> 中国大陆主要的 CTAN 镜像站点</h2>
+<p>制作 MiKTeX 仓库源首先需要知道可用的 CTAN 镜像有哪些，目前，在中国大陆的主要镜像站点如下：</p>
+<ul>
+<li>阿里云 <a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/CTAN/">http://mirrors.aliyun.com/CTAN/</a></li>
+<li>北京理工大学 <a target="_blank" rel="noopener" href="http://mirrors.bit.edu.cn/CTAN/">http://mirrors.bit.edu.cn/CTAN/</a></li>
+<li>北京交通大学 <a target="_blank" rel="noopener" href="https://mirror.bjtu.edu.cn/CTAN/">https://mirror.bjtu.edu.cn/CTAN/</a></li>
+<li>中国互联网络信息中心 <a target="_blank" rel="noopener" href="https://mirrors.cnnic.cn/CTAN/">https://mirrors.cnnic.cn/CTAN/</a></li>
+<li>重庆大学 <a target="_blank" rel="noopener" href="https://mirrors.cqu.edu.cn/CTAN/">https://mirrors.cqu.edu.cn/CTAN/</a></li>
+<li>华为云 <a target="_blank" rel="noopener" href="https://mirrors.huaweicloud.com/CTAN/">https://mirrors.huaweicloud.com/CTAN/</a></li>
+<li>华中科技大学 <a target="_blank" rel="noopener" href="http://mirrors.hust.edu.cn/CTAN/">http://mirrors.hust.edu.cn/CTAN/</a></li>
+<li>兰州大学 <a target="_blank" rel="noopener" href="https://mirror.lzu.edu.cn/CTAN/">https://mirror.lzu.edu.cn/CTAN/</a></li>
+<li>东北大学 <a target="_blank" rel="noopener" href="http://mirror.neu.edu.cn/CTAN/">http://mirror.neu.edu.cn/CTAN/</a></li>
+<li>南京大学 <a target="_blank" rel="noopener" href="http://mirrors.nju.edu.cn/CTAN/">http://mirrors.nju.edu.cn/CTAN/</a></li>
+<li>上海交通大学 <a target="_blank" rel="noopener" href="https://mirrors.sjtug.sjtu.edu.cn/ctan/">https://mirrors.sjtug.sjtu.edu.cn/ctan/</a></li>
+<li>腾讯云 <a target="_blank" rel="noopener" href="https://mirrors.cloud.tencent.com/CTAN/">https://mirrors.cloud.tencent.com/CTAN/</a></li>
+<li>清华大学 <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/CTAN/">https://mirrors.tuna.tsinghua.edu.cn/CTAN/</a></li>
+<li>中国科学技术大学 <a target="_blank" rel="noopener" href="https://mirrors.ustc.edu.cn/CTAN/">https://mirrors.ustc.edu.cn/CTAN/</a></li>
+<li>浙江大学 <a target="_blank" rel="noopener" href="http://mirrors.zju.edu.cn/CTAN/">http://mirrors.zju.edu.cn/CTAN/</a></li>
+</ul>
+<h2 id="wget-制作-miktex-仓库源的脚本"><a class="markdownIt-Anchor" href="#wget-制作-miktex-仓库源的脚本"></a> wget 制作 MiKTeX 仓库源的脚本</h2>
+<p>以使用上海交通大学镜像源为例，创建 MiKTeX 仓库源的脚本为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -r -l inf -N -np --no-check-certificate --no-host-directories --directory-prefix&#x3D;MiKTeX-Repository --cut-dirs&#x3D;4  https:&#x2F;&#x2F;mirrors.sjtug.sjtu.edu.cn&#x2F;ctan&#x2F;systems&#x2F;win32&#x2F;miktex&#x2F;tm&#x2F;</span><br></pre></td></tr></table></figure>
+<p>这其中大部分 <code>wget</code> 命令的参数在前面已经解释过了，这里不再赘述。复制的目标 <code>url</code> 是：<code>https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/win32/miktex/tm/</code>，一般情况下<code>CTAN://sytem/win32/miktex/</code> 下 <code>doc/</code> （MiKTeX 使用手册）、<code>source/</code>（MiKTeX 源代码）<code>setup</code>（MiKTeX 安装程序）不需要下载（如果需要下载安装程序可以直接找到目标文件下载，没必要把其他平台的安装程序都下载下来，太占地方了），不想用上海交通大学的镜像站可以将 <code>https://mirrors.sjtug.sjtu.edu.cn/ctan/</code> 换成前面任何一个你感觉速度比较快的镜像站（我的物理地址就在上海，上海交通大学镜像站的速度是最快的）。</p>
+<p>运行上面的脚本，下载完毕后，在当前目录下将出现：<code>MiKTeX-Repository</code> 文件夹，这个文件夹即为 MiKTeX 仓库。运行 MiKTeX-Console，将跳出如下对话框：<br />
+<img src="" alt="MiKTeX-Console 对话框" /><br />
+选择 `` 选项卡，。</p>
+<p><code>MiKTeX-Repository</code> 也可以置于局域网中，只是地址将。这样可以一个团队共用同一个仓库源进行更新，不需要每人都在自己计算机本地制作一个仓库源。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Chennan ZHANG
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/" title="使用 wget 下载制作 MiKTeX 仓库的源">http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
 </div>
 
-</header>
 
-      
-      
-      
-      <div class="post-body">
-          <div class="category-all-page">
-            <div class="category-all-title">
-              目前共计 2 个分类
-            </div>
-            <div class="category-all">
-              <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9D%82%E8%AE%B0/">杂记</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8A%80%E6%9C%AF/">计算机技术</a><span class="category-list-count">8</span></li></ul>
-            </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LaTeX/" rel="tag"># LaTeX</a>
+              <a href="/tags/MiKTeX/" rel="tag"># MiKTeX</a>
+              <a href="/tags/wget/" rel="tag"># wget</a>
           </div>
-        
-      </div>
-      
-      
-      
-    </div>
-    
 
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/26/VSCode-setting-for-LaTeX/" rel="prev" title="VS Code 作为 LaTeX 前端编辑器的配置">
+      <i class="fa fa-chevron-left"></i> VS Code 作为 LaTeX 前端编辑器的配置
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
     
-    
-    
+  </article>
+  
+  
+  
+
 
 
           </div>
@@ -251,6 +351,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#wget-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text"> wget 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wget-%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%BB%E8%A6%81%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text"> wget 命令行主要参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-wget-%E5%88%B6%E4%BD%9C-miktex-%E4%BB%93%E5%BA%93%E6%BA%90"><span class="nav-number">2.</span> <span class="nav-text"> 使用 wget 制作 MiKTeX 仓库源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%9B%BD%E5%A4%A7%E9%99%86%E4%B8%BB%E8%A6%81%E7%9A%84-ctan-%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9"><span class="nav-number">2.1.</span> <span class="nav-text"> 中国大陆主要的 CTAN 镜像站点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wget-%E5%88%B6%E4%BD%9C-miktex-%E4%BB%93%E5%BA%93%E6%BA%90%E7%9A%84%E8%84%9A%E6%9C%AC"><span class="nav-number">2.2.</span> <span class="nav-text"> wget 制作 MiKTeX 仓库源的脚本</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -305,7 +305,10 @@
     <a href="/2021/01/25/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E%E8%AE%BE%E7%BD%AE/" rel="prev" title="Windows系统安装后的一些琐碎设置">
       <i class="fa fa-chevron-left"></i> Windows系统安装后的一些琐碎设置
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/29/MiKTeX-repository-download-with-wget/" rel="next" title="使用 wget 下载制作 MiKTeX 仓库的源">
+      使用 wget 下载制作 MiKTeX 仓库的源 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -380,7 +383,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -393,7 +396,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -545,6 +548,28 @@ if (document.querySelectorAll('pre.mermaid').length) {
 </script>
 
 
+<script type="text/javascript">
+var originalTitle = document.title;      // 1.
+var crashSwitched = false;               // 2.
+var titleTime;
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden) {
+    if (Math.random() < parseFloat()) {         // 3.
+      crashSwitched = true;              // 2.a.
+      document.title = '' + originalTitle;     // 1.a.
+      clearTimeout(titleTime);
+    }
+  } else {
+    if (crashSwitched == true) {
+      crashSwitched = false;             // 2.b.
+      document.title = '' + originalTitle;   // 1.b.
+      titleTime = setTimeout(function () {
+        document.title = originalTitle;  // 1.c.
+      }, 2000);
+    }
+  }
+});
+</script>
   
 
   

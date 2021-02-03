@@ -28,7 +28,7 @@
 <meta property="og:description" content="两天前，有道路专业的同事找我帮忙解决一个问题：  既有一个 *.dwg 文件，存储了大量片区管线资料，管线按实际位置以空间直线（LINE）而非空间多段线（POLYLINE）的形式存储，不同类型的管线分图层存储，现需要沿道路中心线按给定桩号间隔读取道路宽度范围内所有管线的标高或埋深，希望能有比较便捷的程序进行处理。  说实话，这个问题在 AutoCAD 中的解决方法并不是很困难，只是过程相对繁琐，并">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-01-22T06:37:26.000Z">
-<meta property="article:modified_time" content="2021-01-25T09:57:45.932Z">
+<meta property="article:modified_time" content="2021-01-29T05:22:58.361Z">
 <meta property="article:author" content="Chennan ZHANG">
 <meta property="article:tag" content="AutoCAD">
 <meta property="article:tag" content="AutoLisp&#x2F;VisualLisp">
@@ -196,7 +196,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-25 17:57:45" itemprop="dateModified" datetime="2021-01-25T17:57:45+08:00">2021-01-25</time>
+                <time title="修改时间：2021-01-29 13:22:58" itemprop="dateModified" datetime="2021-01-29T13:22:58+08:00">2021-01-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -236,7 +236,7 @@
 <p>不太容易理解但好扩展的炫技写法是：</p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">apply</span> &#x27;or </span><br><span class="line">  (<span class="name">mapcar</span> </span><br><span class="line">    &#x27;(lambda(x) </span><br><span class="line">      (cons x (mapcar &#x27;caddr (list pts ptm pte)))) </span><br><span class="line">    (<span class="name">list</span> &#x27;&gt; &#x27;&lt;)))</span><br></pre></td></tr></table></figure>
 <p>若上面表达式值为 <code>T</code>，则直线段与平面的交点坐标为：</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">trans</span> </span><br><span class="line">  (<span class="name">inters</span> </span><br><span class="line">    pts </span><br><span class="line">    pte </span><br><span class="line">    (<span class="name">list</span> (<span class="name">car</span> pts) (<span class="name">cadr</span> ptm) (<span class="name">caddr</span> ptm)) </span><br><span class="line">    (<span class="name">list</span> (<span class="name">car</span> pte) (<span class="name">cadr</span> pte) (<span class="name">caddr</span> ptm)) </span><br><span class="line">    T) </span><br><span class="line">  normal <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">trans</span> </span><br><span class="line">  (<span class="name">inters</span> </span><br><span class="line">    pts </span><br><span class="line">    pte </span><br><span class="line">    (<span class="name">list</span> (<span class="name">car</span> pts) (<span class="name">cadr</span> pts) (<span class="name">caddr</span> ptm)) </span><br><span class="line">    (<span class="name">list</span> (<span class="name">car</span> pte) (<span class="name">cadr</span> pte) (<span class="name">caddr</span> ptm)) </span><br><span class="line">    T) </span><br><span class="line">  normal <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
 <p>这个很好理解，就是空间直线段与其在平面上的投影的交点。</p>
 <p>目前为止，道路中心线某一里程点的法平面很容易确定，因此只需要遍历所有管线，判断其是否与法平面相交，若相交则求取交点，并结合管线的其他信息存储在一个表中。这时存在一个问题，管线的图元数量巨大，且对于某一里程点来说，大部分管线是不与道路里程点的法平面相交的，为了避免这些无意义的计算与判断，必须进行过滤选择。AutoLisp 中的 <code>ssget</code> 函数提供了很多过滤功能，其中 <code>f</code> 选项可以通过两点画线相交的方式进行过滤选择。我从前不确定这种选择方式是否在图形屏幕区以外的部分能够将图元选择上，所以一直都不常使用这种过滤方式，如今进行一下测试，即使是不在 AutoCAD 图形屏幕区范围内的图元也能够被选中，那么问题就相对简单了，只需要</p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> ss (<span class="name">ssget</span> <span class="string">&quot;f&quot;</span> (<span class="name">list</span> pt1 pt2) (<span class="name">list</span> (<span class="number">0</span> . <span class="string">&quot;LINE&quot;</span>) (<span class="name">cons</span> <span class="number">8</span> layer))))</span><br></pre></td></tr></table></figure>
@@ -378,7 +378,7 @@ cond(no)->op2</textarea><textarea id="flowchart-0-options" style="display: none"
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -391,7 +391,7 @@ cond(no)->op2</textarea><textarea id="flowchart-0-options" style="display: none"
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -543,6 +543,28 @@ if (document.querySelectorAll('pre.mermaid').length) {
 </script>
 
 
+<script type="text/javascript">
+var originalTitle = document.title;      // 1.
+var crashSwitched = false;               // 2.
+var titleTime;
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden) {
+    if (Math.random() < parseFloat()) {         // 3.
+      crashSwitched = true;              // 2.a.
+      document.title = '' + originalTitle;     // 1.a.
+      clearTimeout(titleTime);
+    }
+  } else {
+    if (crashSwitched == true) {
+      crashSwitched = false;             // 2.b.
+      document.title = '' + originalTitle;   // 1.b.
+      titleTime = setTimeout(function () {
+        document.title = originalTitle;  // 1.c.
+      }, 2000);
+    }
+  }
+});
+</script>
   
 
   

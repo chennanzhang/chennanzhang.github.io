@@ -184,10 +184,10 @@
       <div class="post-body">
           <div class="tag-cloud">
             <div class="tag-cloud-title">
-              目前共计 13 个标签
+              目前共计 15 个标签
             </div>
             <div class="tag-cloud-tags">
-              <a href="/tags/AutoCAD/" style="font-size: 21px; color: #6f6f6f">AutoCAD</a> <a href="/tags/AutoLisp-VisualLisp/" style="font-size: 21px; color: #6f6f6f">AutoLisp/VisualLisp</a> <a href="/tags/LaTeX/" style="font-size: 30px; color: #111">LaTeX</a> <a href="/tags/LaTeX-Workshop/" style="font-size: 12px; color: #ccc">LaTeX Workshop</a> <a href="/tags/LaTeX3/" style="font-size: 12px; color: #ccc">LaTeX3</a> <a href="/tags/Notepad/" style="font-size: 12px; color: #ccc">Notepad++</a> <a href="/tags/OS/" style="font-size: 12px; color: #ccc">OS</a> <a href="/tags/TECKit/" style="font-size: 12px; color: #ccc">TECKit</a> <a href="/tags/VSCode/" style="font-size: 12px; color: #ccc">VSCode</a> <a href="/tags/Windows/" style="font-size: 12px; color: #ccc">Windows</a> <a href="/tags/xeCJK/" style="font-size: 12px; color: #ccc">xeCJK</a> <a href="/tags/%E5%B8%82%E6%94%BF%E9%81%93%E8%B7%AF%E7%AE%A1%E7%BA%BF/" style="font-size: 12px; color: #ccc">市政道路管线</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 12px; color: #ccc">编辑器</a>
+              <a href="/tags/AutoCAD/" style="font-size: 21px; color: #6f6f6f">AutoCAD</a> <a href="/tags/AutoLisp-VisualLisp/" style="font-size: 21px; color: #6f6f6f">AutoLisp/VisualLisp</a> <a href="/tags/LaTeX/" style="font-size: 30px; color: #111">LaTeX</a> <a href="/tags/LaTeX-Workshop/" style="font-size: 12px; color: #ccc">LaTeX Workshop</a> <a href="/tags/LaTeX3/" style="font-size: 12px; color: #ccc">LaTeX3</a> <a href="/tags/MiKTeX/" style="font-size: 12px; color: #ccc">MiKTeX</a> <a href="/tags/Notepad/" style="font-size: 12px; color: #ccc">Notepad++</a> <a href="/tags/OS/" style="font-size: 12px; color: #ccc">OS</a> <a href="/tags/TECKit/" style="font-size: 12px; color: #ccc">TECKit</a> <a href="/tags/VSCode/" style="font-size: 12px; color: #ccc">VSCode</a> <a href="/tags/Windows/" style="font-size: 12px; color: #ccc">Windows</a> <a href="/tags/wget/" style="font-size: 12px; color: #ccc">wget</a> <a href="/tags/xeCJK/" style="font-size: 12px; color: #ccc">xeCJK</a> <a href="/tags/%E5%B8%82%E6%94%BF%E9%81%93%E8%B7%AF%E7%AE%A1%E7%BA%BF/" style="font-size: 12px; color: #ccc">市政道路管线</a> <a href="/tags/%E7%BC%96%E8%BE%91%E5%99%A8/" style="font-size: 12px; color: #ccc">编辑器</a>
             </div>
           </div>
         
@@ -266,7 +266,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -279,7 +279,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -431,6 +431,28 @@ if (document.querySelectorAll('pre.mermaid').length) {
 </script>
 
 
+<script type="text/javascript">
+var originalTitle = document.title;      // 1.
+var crashSwitched = false;               // 2.
+var titleTime;
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden) {
+    if (Math.random() < parseFloat()) {         // 3.
+      crashSwitched = true;              // 2.a.
+      document.title = '' + originalTitle;     // 1.a.
+      clearTimeout(titleTime);
+    }
+  } else {
+    if (crashSwitched == true) {
+      crashSwitched = false;             // 2.b.
+      document.title = '' + originalTitle;   // 1.b.
+      titleTime = setTimeout(function () {
+        document.title = originalTitle;  // 1.c.
+      }, 2000);
+    }
+  }
+});
+</script>
   
 
   
