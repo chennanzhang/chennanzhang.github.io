@@ -186,7 +186,7 @@
 
       <div class="post-title">
           <a class="post-title-link" href="/2021/01/29/MiKTeX-repository-download-with-wget/" itemprop="url">
-            <span itemprop="name">使用 wget 下载制作 MiKTeX 仓库的源</span>
+            <span itemprop="name">MiKTeX 本地宏包仓库源的制作方法</span>
           </a>
       </div>
 
@@ -437,15 +437,15 @@ var crashSwitched = false;
 var titleTime;
 document.addEventListener('visibilitychange', function () {
   if (document.hidden) {
-    if (Math.random() < parseFloat(0.5)) {        
+    if (Math.random() < parseFloat(0.2)) {        
       crashSwitched = true;              
-      document.title = '(┳Д┳) 页面崩溃啦~' + originalTitle;     
+      document.title = '(┳Д┳) 页面崩溃啦~~' + originalTitle;     
       clearTimeout(titleTime);
     }
   } else {
     if (crashSwitched == true) {
       crashSwitched = false;            
-      document.title = '(๑¯◡¯๑) 嘿嘿，好了' + originalTitle;   
+      document.title = '(๑¯◡¯๑) 嘿嘿，好了~' + originalTitle;   
       titleTime = setTimeout(function () {
         document.title = originalTitle;  // 
       }, 2000);

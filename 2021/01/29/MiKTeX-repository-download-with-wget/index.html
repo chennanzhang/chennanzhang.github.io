@@ -22,18 +22,21 @@
 
   <meta name="description" content="MiKTeX 是 TeX 系统的主流发行版之一，由于其体积较小，编译过程中（on-the-fly）自动下载安装未安装宏包的特性，受到许多 LaTeXer 的青睐。很多中国的 LaTeXer 入门时使用的发行版 CTEX 套装即是封装 MiKTeX 而成。MiKTeX 最初是针对 Windows 系统开发，应该是考虑了 Windows 系统编码问题，因此，在被编译源文档中使用中文路径和文件名一般能够">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用 wget 下载制作 MiKTeX 仓库的源">
+<meta property="og:title" content="MiKTeX 本地宏包仓库源的制作方法">
 <meta property="og:url" content="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/index.html">
 <meta property="og:site_name" content="极客斋">
 <meta property="og:description" content="MiKTeX 是 TeX 系统的主流发行版之一，由于其体积较小，编译过程中（on-the-fly）自动下载安装未安装宏包的特性，受到许多 LaTeXer 的青睐。很多中国的 LaTeXer 入门时使用的发行版 CTEX 套装即是封装 MiKTeX 而成。MiKTeX 最初是针对 Windows 系统开发，应该是考虑了 Windows 系统编码问题，因此，在被编译源文档中使用中文路径和文件名一般能够">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/plan.png">
+<meta property="og:image" content="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/miktexconsole.png">
 <meta property="article:published_time" content="2021-01-29T04:52:47.000Z">
-<meta property="article:modified_time" content="2021-02-01T10:08:27.439Z">
+<meta property="article:modified_time" content="2021-02-04T07:26:50.890Z">
 <meta property="article:author" content="Chennan ZHANG">
 <meta property="article:tag" content="LaTeX">
 <meta property="article:tag" content="MiKTeX">
 <meta property="article:tag" content="wget">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/plan.png">
 
 <link rel="canonical" href="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/">
 
@@ -48,7 +51,7 @@
   };
 </script>
 
-  <title>使用 wget 下载制作 MiKTeX 仓库的源 | 极客斋</title>
+  <title>MiKTeX 本地宏包仓库源的制作方法 | 极客斋</title>
   
 
 
@@ -179,7 +182,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          使用 wget 下载制作 MiKTeX 仓库的源
+          MiKTeX 本地宏包仓库源的制作方法
         </h1>
 
         <div class="post-meta">
@@ -196,7 +199,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-01 18:08:27" itemprop="dateModified" datetime="2021-02-01T18:08:27+08:00">2021-02-01</time>
+                <time title="修改时间：2021-02-04 15:26:50" itemprop="dateModified" datetime="2021-02-04T15:26:50+08:00">2021-02-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -219,14 +222,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>MiKTeX 是 TeX 系统的主流发行版之一，由于其体积较小，编译过程中（on-the-fly）自动下载安装未安装宏包的特性，受到许多 LaTeXer 的青睐。很多中国的 LaTeXer 入门时使用的发行版 CTEX 套装即是封装 MiKTeX 而成。MiKTeX 最初是针对 Windows 系统开发，应该是考虑了 Windows 系统编码问题，因此，在被编译源文档中使用中文路径和文件名一般能够正常编译（前提是源文档 <code>utf-8</code> 编码，<code>xelatex</code> 编译），这对于英文词汇量不足的中文用户相当友好，因此受到众多中文用户的欢迎。不过，对于中国用户来说，由于网络环境的因素，中国大陆的 CTAN 镜像源在 MikTeX 的 Console 中经常无法找到，这使得 on-the-fly 安装宏包的功能受到了限制。这个问题可以通过制作本地或局域网的仓库而得到解决。本文将简单介绍 wget 制作 MiKTeX 仓库源的方法。</p>
+        <p>MiKTeX 是 TeX 系统的主流发行版之一，由于其体积较小，编译过程中（on-the-fly）自动下载安装未安装宏包的特性，受到许多 LaTeXer 的青睐。很多中国的 LaTeXer 入门时使用的发行版 CTEX 套装即是封装 MiKTeX 而成。MiKTeX 最初是针对 Windows 系统开发，应该是考虑了 Windows 系统编码问题，因此，在被编译源文档中使用中文路径和文件名一般能够正常编译（前提是源文档 <code>utf-8</code> 编码，<code>xelatex</code> 编译），这对于英文词汇量不足的中文用户相当友好，因此受到众多中文用户的欢迎。不过，对于中国用户来说，由于网络环境的因素，中国大陆的 CTAN 镜像源在 MikTeX 的 Console 中经常无法找到，这使得 on-the-fly 安装宏包的功能受到了限制。这个问题可以通过制作本地仓库而得到解决。本文将简单介绍制作 MiKTeX 本地仓库源的方法。</p>
 <a id="more"></a>
-<h1 id="wget-介绍"><a class="markdownIt-Anchor" href="#wget-介绍"></a> wget 介绍</h1>
-<h2 id="简介"><a class="markdownIt-Anchor" href="#简介"></a> 简介</h2>
-<h2 id="wget-命令行主要参数"><a class="markdownIt-Anchor" href="#wget-命令行主要参数"></a> <code>wget</code> 命令行主要参数</h2>
-<h1 id="使用-wget-制作-miktex-仓库源"><a class="markdownIt-Anchor" href="#使用-wget-制作-miktex-仓库源"></a> 使用 wget 制作 MiKTeX 仓库源</h1>
-<h2 id="中国大陆主要的-ctan-镜像站点"><a class="markdownIt-Anchor" href="#中国大陆主要的-ctan-镜像站点"></a> 中国大陆主要的 CTAN 镜像站点</h2>
-<p>制作 MiKTeX 仓库源首先需要知道可用的 CTAN 镜像有哪些，目前，在中国大陆的主要镜像站点如下：</p>
+<h1 id="中国大陆主要的-ctan-镜像站点"><a class="markdownIt-Anchor" href="#中国大陆主要的-ctan-镜像站点"></a> 中国大陆主要的 CTAN 镜像站点</h1>
+<p>制作 MiKTeX 宏包仓库源首先需要知道可用的 CTAN 镜像有哪些，目前，在中国大陆的主要镜像站点如下<a href="#refer-anchor-1"><sup>[1]</sup></a>：</p>
 <ul>
 <li>阿里云 <a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/CTAN/">http://mirrors.aliyun.com/CTAN/</a></li>
 <li>北京理工大学 <a target="_blank" rel="noopener" href="http://mirrors.bit.edu.cn/CTAN/">http://mirrors.bit.edu.cn/CTAN/</a></li>
@@ -244,14 +243,71 @@
 <li>中国科学技术大学 <a target="_blank" rel="noopener" href="https://mirrors.ustc.edu.cn/CTAN/">https://mirrors.ustc.edu.cn/CTAN/</a></li>
 <li>浙江大学 <a target="_blank" rel="noopener" href="http://mirrors.zju.edu.cn/CTAN/">http://mirrors.zju.edu.cn/CTAN/</a></li>
 </ul>
-<h2 id="wget-制作-miktex-仓库源的脚本"><a class="markdownIt-Anchor" href="#wget-制作-miktex-仓库源的脚本"></a> wget 制作 MiKTeX 仓库源的脚本</h2>
-<p>以使用上海交通大学镜像源为例，创建 MiKTeX 仓库源的脚本为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -r -l inf -N -np --no-check-certificate --no-host-directories --directory-prefix&#x3D;MiKTeX-Repository --cut-dirs&#x3D;4  https:&#x2F;&#x2F;mirrors.sjtug.sjtu.edu.cn&#x2F;ctan&#x2F;systems&#x2F;win32&#x2F;miktex&#x2F;tm&#x2F;</span><br></pre></td></tr></table></figure>
-<p>这其中大部分 <code>wget</code> 命令的参数在前面已经解释过了，这里不再赘述。复制的目标 <code>url</code> 是：<code>https://mirrors.sjtug.sjtu.edu.cn/ctan/systems/win32/miktex/tm/</code>，一般情况下<code>CTAN://sytem/win32/miktex/</code> 下 <code>doc/</code> （MiKTeX 使用手册）、<code>source/</code>（MiKTeX 源代码）<code>setup</code>（MiKTeX 安装程序）不需要下载（如果需要下载安装程序可以直接找到目标文件下载，没必要把其他平台的安装程序都下载下来，太占地方了），不想用上海交通大学的镜像站可以将 <code>https://mirrors.sjtug.sjtu.edu.cn/ctan/</code> 换成前面任何一个你感觉速度比较快的镜像站（我的物理地址就在上海，上海交通大学镜像站的速度是最快的）。</p>
-<p>运行上面的脚本，下载完毕后，在当前目录下将出现：<code>MiKTeX-Repository</code> 文件夹，这个文件夹即为 MiKTeX 仓库。运行 MiKTeX-Console，将跳出如下对话框：<br />
-<img src="" alt="MiKTeX-Console 对话框" /><br />
-选择 `` 选项卡，。</p>
-<p><code>MiKTeX-Repository</code> 也可以置于局域网中，只是地址将。这样可以一个团队共用同一个仓库源进行更新，不需要每人都在自己计算机本地制作一个仓库源。</p>
+<p>在本文后续中，我将以 <code>CTAN://</code> 来指代任意一个镜像源。</p>
+<h1 id="仓库源的下载"><a class="markdownIt-Anchor" href="#仓库源的下载"></a> 仓库源的下载</h1>
+<h2 id="miktex-官方提供方法"><a class="markdownIt-Anchor" href="#miktex-官方提供方法"></a> MiKTeX 官方提供方法</h2>
+<p>MiKTeX 官方提供了一个制作本地宏包仓库源的方法<a href="#refer-anchor-2"><sup>[2]</sup></a>：</p>
+<ol>
+<li>创建一个本地的仓库目录：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">md &lt;local-repository-dir&gt;</span><br></pre></td></tr></table></figure>
+<p>在命令行中使用命令时需要将 <code>&lt;local-repository-dir&gt;</code> 替换成为合法的路径名称（注意不要带着 <code>&lt;</code> <code>&gt;</code> 这对尖括号，哎，这完全是写给命令行白痴看的，熟悉命令行操作的人忽略这么白痴的提示吧）。</p>
+<ol start="2">
+<li>利用 MiKTeX 提供的 <code>miktexsetup</code> 将仓库下载至本地：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">miktexsetup  --verbose --remote-package-repository&#x3D;&lt;url&gt; --local-package-repository&#x3D;&lt;local-repository-dir&gt; --package-set&#x3D;complete download</span><br></pre></td></tr></table></figure>
+<p>这其中，<code>&lt;url&gt;</code> 需要替换为 <code>CTAN://systems/win32/miktex/tm/packages/</code> （继续白痴提示：别忘了 <code>CTAN://</code> 指代的是镜像源地址），<code>&lt;local-repository-dir&gt;</code> 替换为刚刚创建的既有本地路径。</p>
+<p>MiKTeX 官方的方法需要使用官方的 <code>miktexsetup</code> 工具<a href="#refer-anchor-3"><sup>[3]</sup></a>，该工具支持的下载源可以通过命令行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">miktexsetup --list-repositories </span><br></pre></td></tr></table></figure>
+<p>列出所有支持下载的远程仓库源。我本人不使用 MiKTeX （portable 便携版除外）已经好几年了，在几年前使用 MiKTeX 时曾发现这个列表中经常会排除中国大陆的镜像源，而不在这个列表中的仓库源是无法通过 MiKTeX Console 设置为远程仓库源，自然地，也就无法通过官方的工具进行下载。在我进行官方方法测试时可能是因为我的运气比较好，抑或是 MiKTeX 官方进行了一些改进，有几个中国大陆镜像站（几个大学镜像站点）的仓库源被列在其中，因此这种方法得以测试成功。如果 MiKTeX 并未做出改进，并且你的运气没那么好，官方提供的这种方法就没有用处了，你需要继续向下看。</p>
+<h2 id="wget-制作-miktex-本地仓库源"><a class="markdownIt-Anchor" href="#wget-制作-miktex-本地仓库源"></a> Wget 制作 MiKTeX 本地仓库源</h2>
+<p>GNU Wget（简称为 Wget）是一个在网络上进行下载的简单而强大的自由软件，其本身也是 GNU 计划的一部分。目前它支持通过 HTTP、HTTPS、FTP、FTPS 等最常见的 TCP/IP 协议下载文件。它是一个基于命令行的非交互式工具，因此可以轻松地从脚本中调用<a href="#refer-anchor-4"><sup>[4]</sup></a><a href="#refer-anchor-5"><sup>[5]</sup></a>。GNU Wget 相关下载可以参见 <a target="_blank" rel="noopener" href="https://ftp.gnu.org/gnu/wget/">源码</a> 和 <a target="_blank" rel="noopener" href="https://eternallybored.org/misc/wget/">Windows 安装包</a>。</p>
+<p>关于 Wget 的使用将<a href="">另行撰文</a>介绍，这里不进行详述。创建 MiKTeX 仓库源的脚本为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -r -N -np --no-check-certificate --no-host-directories --directory-prefix&#x3D;&lt;local-repository-dir&gt; --cut-dirs&#x3D;6  &lt;url&gt;</span><br></pre></td></tr></table></figure>
+<p>简单介绍这其中几个参数：</p>
+<ul>
+<li><code>-r</code> 递归下载；</li>
+<li><code>-N</code> 检查文件时间版本，比本地文件新的进行下载，其余忽略；</li>
+<li><code>-np</code> 忽略 <code>&lt;url&gt;</code> 中父目录的文件；</li>
+<li><code>--no-check-certificate</code> 不进行证书验证；</li>
+<li><code>--no-host-directories</code> 不创建站点名如 <code>mirrors.aliyun.com</code> 这样的目录</li>
+<li><code>--directory-prefix=&lt;local-repository-dir&gt;</code> 指定下载的目标目录</li>
+<li><code>--cut-dirs=6</code> 下载目标目录中截断 <code>&lt;url&gt;</code> 中 <code>6</code> 级目录</li>
+</ul>
+<p>这种方法将不受 MiKTeX 仓库源地址的限制，但由于采用递归下载，MiKTeX 为下一版本升级准备的仓库文件夹 <code>/next</code> 也将被下载下来。我尝试了 <code>-X</code> 排除选项，但是并没有成功，可能是我的姿势还有一些不对吧 😓。<code>/next</code> 目录大约也有 4G 左右体积，如果硬盘不紧张，放着也没事🤣。</p>
+<h2 id="将更新脚本列入-windows-任务计划"><a class="markdownIt-Anchor" href="#将更新脚本列入-windows-任务计划"></a> 将更新脚本列入 Windows 任务计划</h2>
+<p>Windows 操作系统中有一个 <code>任务计划程序</code>，很少被人用到，然而，对于高效率工作来说，它具有很多妙用，可以自动清理回收站，自动开关软件，自动批量处理文件等。</p>
+<p>使用命令行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">taskschd.msc</span><br></pre></td></tr></table></figure>
+<p>可以调出 <code>任务计划程序</code>，如下图所示：<br />
+<img src="plan.png" alt="任务计划程序" /></p>
+<p>点击 <code>创建基本任务...</code> 在向导内一步步设定任务名称、触发条件、执行的程序或批处理文件即可。Windows 的程序非常傻瓜，这里不再详述。更新脚本列入 Windows 任务计划，则可以定期将 MiKTeX 本地仓库进行更新。</p>
+<h1 id="在-miktex-中指定本地仓库源"><a class="markdownIt-Anchor" href="#在-miktex-中指定本地仓库源"></a> 在 MiKTeX 中指定本地仓库源</h1>
+<p>运行 MiKTeX-Console，将跳出如下对话框：<br />
+<img src="miktexconsole.png" alt="MiKTeX-Console 对话框" /><br />
+选择 <code>General</code> 选项卡，在 <code>Package installation</code> 栏目中 选择 <code>Package Source</code> 为 <code>Local Package repository (file system)</code>，并将文件夹指向 <code>&lt;local-repository-dir&gt;</code> 即可。上图中，<code>&lt;local-repository-dir&gt;</code> 即为 <code>H：/MiKTeX-Repository/tm/packages</code>。显然，该仓库也可以置于局域网中，这样可以一个团队共用同一个仓库源进行更新，不需要每人都在自己计算机本地制作一个仓库源。</p>
+<p>Happy LaTeXing！</p>
+<h1 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h1>
+<div id="refer-anchor-1"></div>
+<ul>
+<li>[1] <a target="_blank" rel="noopener" href="https://github.com/OsbertWang/install-latex-guide-zh-cn">一份简短的关于 LaTeX 安装的介绍</a> <code>texdoc install-latex</code></li>
+</ul>
+<div id="refer-anchor-2"></div>
+<ul>
+<li>[2] <a target="_blank" rel="noopener" href="https://miktex.org/howto/local-repository">Set up a local package repository</a></li>
+</ul>
+<div id="refer-anchor-3"></div>
+<ul>
+<li>[3] <a target="_blank" rel="noopener" href="https://docs.miktex.org/manual/miktexsetup.html">MIKTeX Docs</a></li>
+</ul>
+<div id="refer-anchor-4"></div>
+<ul>
+<li>[4] <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Wget">维基百科</a></li>
+</ul>
+<div id="refer-anchor-4"></div>
+<ul>
+<li>[5] <a target="_blank" rel="noopener" href="https://www.gnu.org/software/wget/">GNU Wget</a></li>
+</ul>
 
     </div>
 
@@ -267,7 +323,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/" title="使用 wget 下载制作 MiKTeX 仓库的源">http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/</a>
+    <a href="http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/" title="MiKTeX 本地宏包仓库源的制作方法">http://example.com/2021/01/29/MiKTeX-repository-download-with-wget/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -351,7 +407,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#wget-%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text"> wget 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text"> 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wget-%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%B8%BB%E8%A6%81%E5%8F%82%E6%95%B0"><span class="nav-number">1.2.</span> <span class="nav-text"> wget 命令行主要参数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-wget-%E5%88%B6%E4%BD%9C-miktex-%E4%BB%93%E5%BA%93%E6%BA%90"><span class="nav-number">2.</span> <span class="nav-text"> 使用 wget 制作 MiKTeX 仓库源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%AD%E5%9B%BD%E5%A4%A7%E9%99%86%E4%B8%BB%E8%A6%81%E7%9A%84-ctan-%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9"><span class="nav-number">2.1.</span> <span class="nav-text"> 中国大陆主要的 CTAN 镜像站点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wget-%E5%88%B6%E4%BD%9C-miktex-%E4%BB%93%E5%BA%93%E6%BA%90%E7%9A%84%E8%84%9A%E6%9C%AC"><span class="nav-number">2.2.</span> <span class="nav-text"> wget 制作 MiKTeX 仓库源的脚本</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AD%E5%9B%BD%E5%A4%A7%E9%99%86%E4%B8%BB%E8%A6%81%E7%9A%84-ctan-%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9"><span class="nav-number">1.</span> <span class="nav-text"> 中国大陆主要的 CTAN 镜像站点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%93%E5%BA%93%E6%BA%90%E7%9A%84%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text"> 仓库源的下载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#miktex-%E5%AE%98%E6%96%B9%E6%8F%90%E4%BE%9B%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text"> MiKTeX 官方提供方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wget-%E5%88%B6%E4%BD%9C-miktex-%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93%E6%BA%90"><span class="nav-number">2.2.</span> <span class="nav-text"> Wget 制作 MiKTeX 本地仓库源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E6%9B%B4%E6%96%B0%E8%84%9A%E6%9C%AC%E5%88%97%E5%85%A5-windows-%E4%BB%BB%E5%8A%A1%E8%AE%A1%E5%88%92"><span class="nav-number">2.3.</span> <span class="nav-text"> 将更新脚本列入 Windows 任务计划</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8-miktex-%E4%B8%AD%E6%8C%87%E5%AE%9A%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93%E6%BA%90"><span class="nav-number">3.</span> <span class="nav-text"> 在 MiKTeX 中指定本地仓库源</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text"> 参考</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -538,15 +594,15 @@ var crashSwitched = false;
 var titleTime;
 document.addEventListener('visibilitychange', function () {
   if (document.hidden) {
-    if (Math.random() < parseFloat(0.5)) {        
+    if (Math.random() < parseFloat(0.2)) {        
       crashSwitched = true;              
-      document.title = '(┳Д┳) 页面崩溃啦~' + originalTitle;     
+      document.title = '(┳Д┳) 页面崩溃啦~~' + originalTitle;     
       clearTimeout(titleTime);
     }
   } else {
     if (crashSwitched == true) {
       crashSwitched = false;            
-      document.title = '(๑¯◡¯๑) 嘿嘿，好了' + originalTitle;   
+      document.title = '(๑¯◡¯๑) 嘿嘿，好了~' + originalTitle;   
       titleTime = setTimeout(function () {
         document.title = originalTitle;  // 
       }, 2000);

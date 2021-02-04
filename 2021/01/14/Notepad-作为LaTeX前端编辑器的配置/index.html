@@ -555,15 +555,15 @@ var crashSwitched = false;
 var titleTime;
 document.addEventListener('visibilitychange', function () {
   if (document.hidden) {
-    if (Math.random() < parseFloat(0.5)) {        
+    if (Math.random() < parseFloat(0.2)) {        
       crashSwitched = true;              
-      document.title = '(┳Д┳) 页面崩溃啦~' + originalTitle;     
+      document.title = '(┳Д┳) 页面崩溃啦~~' + originalTitle;     
       clearTimeout(titleTime);
     }
   } else {
     if (crashSwitched == true) {
       crashSwitched = false;            
-      document.title = '(๑¯◡¯๑) 嘿嘿，好了' + originalTitle;   
+      document.title = '(๑¯◡¯๑) 嘿嘿，好了~' + originalTitle;   
       titleTime = setTimeout(function () {
         document.title = originalTitle;  // 
       }, 2000);
