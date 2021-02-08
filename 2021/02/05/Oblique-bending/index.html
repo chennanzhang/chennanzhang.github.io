@@ -425,7 +425,6 @@ I_{xy} &amp;=\frac{\delta h}{2} \times \left(-\frac{h}{4}\right) \times \frac{h}
 
           </div>
           
-    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -726,26 +725,6 @@ document.addEventListener('visibilitychange', function () {
 
 
   
-
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
-
-<script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : '844f26f6f4734c6222e7',
-      clientSecret: '491c034cb9097208f22a2aea8d056374b007daf1',
-      repo        : 'chennanzhang.github.io',
-      owner       : 'chennanzhang',
-      admin       : ['chennanzhang'],
-      id          : '6e2388e74d0fb39b7607a19114f560a7',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
-</script>
 
 </body>
 </html>

@@ -343,7 +343,6 @@ cond(no)->op2</textarea><textarea id="flowchart-0-options" style="display: none"
 
           </div>
           
-    <div class="comments" id="gitalk-container"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -644,26 +643,6 @@ document.addEventListener('visibilitychange', function () {
 
 
   
-
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
-
-<script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : '844f26f6f4734c6222e7',
-      clientSecret: '491c034cb9097208f22a2aea8d056374b007daf1',
-      repo        : 'chennanzhang.github.io',
-      owner       : 'chennanzhang',
-      admin       : ['chennanzhang'],
-      id          : '4b663d0a36cb7d0084717d58ae56bab9',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
-</script>
 
 </body>
 </html>
