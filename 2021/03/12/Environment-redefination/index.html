@@ -20,22 +20,25 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="两天前，有道路专业的同事找我帮忙解决一个问题：  既有一个 *.dwg 文件，存储了大量片区管线资料，管线按实际位置以空间直线（LINE）而非空间多段线（POLYLINE）的形式存储，不同类型的管线分图层存储，现需要沿道路中心线按给定桩号间隔读取道路宽度范围内所有管线的标高或埋深，希望能有比较便捷的程序进行处理。  说实话，这个问题在 AutoCAD 中的解决方法并不是很困难，只是过程相对繁琐，并">
+  <meta name="description" content="在 LaTeX\LaTeXLATE​X 中，某些环境的使用比较特殊，在\begin&amp;#123;&lt;env&gt;&amp;#125; 会直接去寻找 \end&amp;#123;&lt;env&gt;&amp;#125;，而这个 \end&amp;#123;&lt;env&gt;&amp;#125; 不可以隐藏在其他的参数或宏里面。在进行自定义时必须注意到它们的特性。本文将介绍自定义命令和环境时，对这种环境的处理方法。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="道路指定桩号处管线标高查询程序的编制思路">
-<meta property="og:url" content="http://example.com/2021/01/22/%E9%81%93%E8%B7%AF%E6%8C%87%E5%AE%9A%E6%A1%A9%E5%8F%B7%E5%A4%84%E7%AE%A1%E7%BA%BF%E6%A0%87%E9%AB%98%E6%9F%A5%E8%AF%A2%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%88%B6%E6%80%9D%E8%B7%AF/index.html">
+<meta property="og:title" content="LaTeX 自定义时一些特殊环境的应用">
+<meta property="og:url" content="http://example.com/2021/03/12/Environment-redefination/index.html">
 <meta property="og:site_name" content="极客斋">
-<meta property="og:description" content="两天前，有道路专业的同事找我帮忙解决一个问题：  既有一个 *.dwg 文件，存储了大量片区管线资料，管线按实际位置以空间直线（LINE）而非空间多段线（POLYLINE）的形式存储，不同类型的管线分图层存储，现需要沿道路中心线按给定桩号间隔读取道路宽度范围内所有管线的标高或埋深，希望能有比较便捷的程序进行处理。  说实话，这个问题在 AutoCAD 中的解决方法并不是很困难，只是过程相对繁琐，并">
+<meta property="og:description" content="在 LaTeX\LaTeXLATE​X 中，某些环境的使用比较特殊，在\begin&amp;#123;&lt;env&gt;&amp;#125; 会直接去寻找 \end&amp;#123;&lt;env&gt;&amp;#125;，而这个 \end&amp;#123;&lt;env&gt;&amp;#125; 不可以隐藏在其他的参数或宏里面。在进行自定义时必须注意到它们的特性。本文将介绍自定义命令和环境时，对这种环境的处理方法。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-01-22T06:37:26.000Z">
-<meta property="article:modified_time" content="2021-01-29T05:22:58.361Z">
+<meta property="og:image" content="http://example.com/2021/03/12/Environment-redefination/example1.png">
+<meta property="og:image" content="http://example.com/2021/03/12/Environment-redefination/te-1.png">
+<meta property="article:published_time" content="2021-03-12T01:17:09.000Z">
+<meta property="article:modified_time" content="2021-03-12T02:43:56.748Z">
 <meta property="article:author" content="Chennan ZHANG">
-<meta property="article:tag" content="AutoCAD">
-<meta property="article:tag" content="AutoLisp&#x2F;VisualLisp">
-<meta property="article:tag" content="市政道路管线">
+<meta property="article:tag" content="LaTeX">
+<meta property="article:tag" content="LaTeX3">
+<meta property="article:tag" content="environment">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2021/03/12/Environment-redefination/example1.png">
 
-<link rel="canonical" href="http://example.com/2021/01/22/%E9%81%93%E8%B7%AF%E6%8C%87%E5%AE%9A%E6%A1%A9%E5%8F%B7%E5%A4%84%E7%AE%A1%E7%BA%BF%E6%A0%87%E9%AB%98%E6%9F%A5%E8%AF%A2%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%88%B6%E6%80%9D%E8%B7%AF/">
+<link rel="canonical" href="http://example.com/2021/03/12/Environment-redefination/">
 
 
 <script id="page-configurations">
@@ -48,7 +51,7 @@
   };
 </script>
 
-  <title>道路指定桩号处管线标高查询程序的编制思路 | 极客斋</title>
+  <title>LaTeX 自定义时一些特殊环境的应用 | 极客斋</title>
   
 
 
@@ -166,7 +169,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/22/%E9%81%93%E8%B7%AF%E6%8C%87%E5%AE%9A%E6%A1%A9%E5%8F%B7%E5%A4%84%E7%AE%A1%E7%BA%BF%E6%A0%87%E9%AB%98%E6%9F%A5%E8%AF%A2%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%88%B6%E6%80%9D%E8%B7%AF/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/03/12/Environment-redefination/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -179,7 +182,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          道路指定桩号处管线标高查询程序的编制思路
+          LaTeX 自定义时一些特殊环境的应用
         </h1>
 
         <div class="post-meta">
@@ -188,16 +191,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-01-22 14:37:26" itemprop="dateCreated datePublished" datetime="2021-01-22T14:37:26+08:00">2021-01-22</time>
+              <time title="创建时间：2021-03-12 09:17:09 / 修改时间：10:43:56" itemprop="dateCreated datePublished" datetime="2021-03-12T09:17:09+08:00">2021-03-12</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-29 13:22:58" itemprop="dateModified" datetime="2021-01-29T13:22:58+08:00">2021-01-29</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -224,8 +221,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/01/22/%E9%81%93%E8%B7%AF%E6%8C%87%E5%AE%9A%E6%A1%A9%E5%8F%B7%E5%A4%84%E7%AE%A1%E7%BA%BF%E6%A0%87%E9%AB%98%E6%9F%A5%E8%AF%A2%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%88%B6%E6%80%9D%E8%B7%AF/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/22/%E9%81%93%E8%B7%AF%E6%8C%87%E5%AE%9A%E6%A1%A9%E5%8F%B7%E5%A4%84%E7%AE%A1%E7%BA%BF%E6%A0%87%E9%AB%98%E6%9F%A5%E8%AF%A2%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%88%B6%E6%80%9D%E8%B7%AF/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/03/12/Environment-redefination/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/03/12/Environment-redefination/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -240,47 +237,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>两天前，有道路专业的同事找我帮忙解决一个问题：</p>
-<blockquote>
-<p>既有一个 <code>*.dwg</code> 文件，存储了大量片区管线资料，管线按实际位置以空间直线（<code>LINE</code>）而非空间多段线（<code>POLYLINE</code>）的形式存储，不同类型的管线分图层存储，现需要沿道路中心线按给定桩号间隔读取道路宽度范围内所有管线的标高或埋深，希望能有比较便捷的程序进行处理。</p>
-</blockquote>
-<p>说实话，这个问题在 AutoCAD 中的解决方法并不是很困难，只是过程相对繁琐，并且算法处理不好时，时间复杂度会比较高，如果是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 级别的时间复杂度则是不能接受的。就在我基本考虑好这个问题并准备编写代码时，<strong>需求</strong> 变了！！！用户希望自行在管线上选取一点读出管线在该位置的标高并标注在图中。这个需求大大降低了程序编制的难度（程序员碰到这种产品经理或用户真要开心死了）。当天吃完午饭后午休时间，用了二十分钟不到的时间，我写完了这段代码（主程序代码都不超过 20 行）。考虑到前面的需求已经进行了一定程度的思索，我在这里把程序编制的思路写下来，以便将来遇到类似的问题可以用得上，同时也测试一下 <code>hexo</code> 的 <code>next</code> 主题下 <code>markdown</code> 中 <code>mermaid</code> 图形生成静态网页的情况。</p>
+        <p>在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext>LaTeX</mtext></mrow><annotation encoding="application/x-tex">\LaTeX</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.89883em;vertical-align:-0.2155em;"></span><span class="mord text"><span class="mord textrm">L</span><span class="mspace" style="margin-right:-0.36em;"></span><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.68333em;"><span style="top:-2.904999em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord text"><span class="mord textrm sizing reset-size6 size3">A</span></span></span></span></span></span><span class="mspace" style="margin-right:-0.15em;"></span><span class="mord text"><span class="mord textrm">T</span><span class="mspace" style="margin-right:-0.1667em;"></span><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.46782999999999997em;"><span style="top:-2.7845em;"><span class="pstrut" style="height:3em;"></span><span class="mord text"><span class="mord textrm">E</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2155em;"><span></span></span></span></span><span class="mspace" style="margin-right:-0.125em;"></span><span class="mord textrm">X</span></span></span></span></span></span> 中，某些环境的使用比较特殊，在<code>\begin&#123;&lt;env&gt;&#125;</code> 会直接去寻找 <code>\end&#123;&lt;env&gt;&#125;</code>，而这个 <code>\end&#123;&lt;env&gt;&#125;</code> 不可以隐藏在其他的参数或宏里面。在进行自定义时必须注意到它们的特性。本文将介绍自定义命令和环境时，对这种环境的处理方法。</p>
 <a id="more"></a>
-<h1 id="程序需要解决的问题及对策"><a class="markdownIt-Anchor" href="#程序需要解决的问题及对策"></a> 程序需要解决的问题及对策</h1>
-<h2 id="道路中线与道路路面的表达"><a class="markdownIt-Anchor" href="#道路中线与道路路面的表达"></a> 道路中线与道路路面的表达</h2>
-<p>道路中心线与道路路面的表达在我自己编写的 <code>BRTools</code> 中已经有了解决办法，道路中心线用连成一体的轻量化多段线（<code>LWPOLYLINE</code>）进行表达，路面信息可以通过竖曲线扩展数据和超高扩展数据进行表达，简言之，对于给定的道路中心线，能够得到任一道路里程点切线和法线方向，加上道路竖曲线、超高信息，就能够得到路面上任一位置的高程。这里，<code>BRTools</code> 对超高的处理不是太完善，变宽路面好像没有考虑（毕竟这是十年前编写的东西，我又不是学道路专业的，真的记不清楚了），可能需要再进行一些补充。</p>
-<h2 id="与指定桩号相关的所有管线的选取"><a class="markdownIt-Anchor" href="#与指定桩号相关的所有管线的选取"></a> 与指定桩号相关的所有管线的选取</h2>
-<p>这个问题是完成整个程序编写的关键，需求变更时把这一步由用户自行选择就大大降低了问题的复杂程度。如果需求仍然是由道路桩号决定，那么就需要求取各种管线与<strong>道路里程点的法平面</strong>之交点。空间直线段与某平面的交点可以通过坐标变换的方式容易求取，假设空间直线段起终点在世界坐标系（<code>WCS</code>）中坐标表分别为变量 <code>pts</code>、<code>pte</code>，平面的法向量为 <code>normal</code>，该平面上的某点坐标变量为 <code>ptm</code>，则：</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> pts (<span class="name">trans</span> pts <span class="number">0</span> normal) </span><br><span class="line">      pte (<span class="name">trans</span> pte <span class="number">0</span> normal)</span><br><span class="line">      ptm (<span class="name">trans</span> ptm <span class="number">0</span> normal))</span><br></pre></td></tr></table></figure>
-<p>则将 <code>pts</code>、<code>pte</code>、<code>ptm</code> 均转换成为以 <code>normal</code> 为法线的对象坐标系（<code>OCS</code>）坐标，若  <code>ptm</code> 的 Z 坐标介于 <code>pts</code> 与 <code>pte</code> 的 Z 坐标之间，则该线段与平面必然存在交点。容易理解但啰嗦的写法是：</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">or</span> </span><br><span class="line">  (<span class="name">&lt;</span> (<span class="name">caddr</span> pts) (<span class="name">caddr</span> ptm) (<span class="name">caddr</span> pte)) </span><br><span class="line">  (<span class="name">&gt;</span> (<span class="name">caddr</span> pts) (<span class="name">caddr</span> ptm) (<span class="name">caddr</span> pte)))</span><br></pre></td></tr></table></figure>
-<p>不太容易理解但好扩展的炫技写法是：</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">apply</span> &#x27;or </span><br><span class="line">  (<span class="name">mapcar</span> </span><br><span class="line">    &#x27;(lambda(x) </span><br><span class="line">      (cons x (mapcar &#x27;caddr (list pts ptm pte)))) </span><br><span class="line">    (<span class="name">list</span> &#x27;&gt; &#x27;&lt;)))</span><br></pre></td></tr></table></figure>
-<p>若上面表达式值为 <code>T</code>，则直线段与平面的交点坐标为：</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">trans</span> </span><br><span class="line">  (<span class="name">inters</span> </span><br><span class="line">    pts </span><br><span class="line">    pte </span><br><span class="line">    (<span class="name">list</span> (<span class="name">car</span> pts) (<span class="name">cadr</span> pts) (<span class="name">caddr</span> ptm)) </span><br><span class="line">    (<span class="name">list</span> (<span class="name">car</span> pte) (<span class="name">cadr</span> pte) (<span class="name">caddr</span> ptm)) </span><br><span class="line">    T) </span><br><span class="line">  normal <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<p>这个很好理解，就是空间直线段与其在平面上的投影的交点。</p>
-<p>目前为止，道路中心线某一里程点的法平面很容易确定，因此只需要遍历所有管线，判断其是否与法平面相交，若相交则求取交点，并结合管线的其他信息存储在一个表中。这时存在一个问题，管线的图元数量巨大，且对于某一里程点来说，大部分管线是不与道路里程点的法平面相交的，为了避免这些无意义的计算与判断，必须进行过滤选择。AutoLisp 中的 <code>ssget</code> 函数提供了很多过滤功能，其中 <code>f</code> 选项可以通过两点画线相交的方式进行过滤选择。我从前不确定这种选择方式是否在图形屏幕区以外的部分能够将图元选择上，所以一直都不常使用这种过滤方式，如今进行一下测试，即使是不在 AutoCAD 图形屏幕区范围内的图元也能够被选中，那么问题就相对简单了，只需要</p>
-<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> ss (<span class="name">ssget</span> <span class="string">&quot;f&quot;</span> (<span class="name">list</span> pt1 pt2) (<span class="name">list</span> (<span class="number">0</span> . <span class="string">&quot;LINE&quot;</span>) (<span class="name">cons</span> <span class="number">8</span> layer))))</span><br></pre></td></tr></table></figure>
-<p>就可以将 <code>pt1</code>、<code>pt2</code> 两点连线划中的位于 <code>layer</code> 图层的 <code>LINE</code> 图元全部选中，置于 <code>ss</code> 选择集中。<code>pt1</code> 和 <code>pt2</code> 可以考虑使用道路中心线正负法向距离为道路半宽的点。至此，程序的主要问题就解决了。</p>
-<h1 id="程序的大概框图"><a class="markdownIt-Anchor" href="#程序的大概框图"></a> 程序的大概框图</h1>
-<p>其实本文没有什么值得记录的意义，我只是想在这里尝试一下 <code>hexo</code> 的<code>next</code> 主题下 <code>markdown</code> 中的 <code>mermaid</code> 或 <code>flow</code> 图形生成静态网页的情况。现在看来，实现没有问题，需要做的事情是装两个插件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-filter-flowchart</span><br></pre></td></tr></table></figure>
-<p>以及</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-filter-mermaid-diagrams</span><br></pre></td></tr></table></figure>
-<p>这个程序的框图可以表现为：</p>
-<div id="flowchart-0" class="flow-chart"></div>
-<p>嗯，说老实话，<code>flow</code> 的效果实在是太 <strong>丑陋</strong> 了，赶明儿个用 <code>graph</code> 写写试试。<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 开始
-op1=>operation: 获取特定里程点表
-op2=>operation: 获取下一个里程点相关信息
-op3=>operation: 形成相关管线选择集
-op4=>operation: 遍历选择集，加入信息表
-cond=>condition: 里程点表是否遍历完成?
-op5=>operation: 信息标注处理
-e=>end: 结束
-
-st->op1->op2->op3->op4->cond
-cond(yes)->op5->e
-cond(no)->op2</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></p>
+<p>具有这样性质的环境包括 <code>tabularx</code>、<code>table</code>、<code>figure</code> 等。我们知道在 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mtext>LaTeX</mtext></mrow><annotation encoding="application/x-tex">\LaTeX</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.89883em;vertical-align:-0.2155em;"></span><span class="mord text"><span class="mord textrm">L</span><span class="mspace" style="margin-right:-0.36em;"></span><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.68333em;"><span style="top:-2.904999em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord text"><span class="mord textrm sizing reset-size6 size3">A</span></span></span></span></span></span><span class="mspace" style="margin-right:-0.15em;"></span><span class="mord text"><span class="mord textrm">T</span><span class="mspace" style="margin-right:-0.1667em;"></span><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.46782999999999997em;"><span style="top:-2.7845em;"><span class="pstrut" style="height:3em;"></span><span class="mord text"><span class="mord textrm">E</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2155em;"><span></span></span></span></span><span class="mspace" style="margin-right:-0.125em;"></span><span class="mord textrm">X</span></span></span></span></span></span> 中，环境的用法是使用一对宏命令 <code>\begin&#123;&lt;env&gt;&#125;</code>、<code>\end&#123;&lt;env&gt;&#125;</code> 来表示环境的起止，而 <code>\begin&#123;&lt;env&gt;&#125;</code> 展开后的宏命令是以 <code>\&lt;env&gt;</code> 开始，<code>\end&#123;&lt;env&gt;&#125;</code> 展开是以 <code>\end&lt;env&gt;</code>结束，这样，我们在定义新环境时，如果需要使用这类环境，就不能把 <code>\begin&#123;&lt;env&gt;&#125;</code>、<code>\end&#123;&lt;env&gt;&#125;</code> 分别放到自定义环境的前后参数，而需要用 <code>\&lt;env&gt;</code>、<code>\end&lt;env&gt;</code> 替代 <code>\begin&#123;&lt;env&gt;&#125;</code> <code>\end&#123;&lt;env&gt;&#125;</code>，如：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>&#123;article&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>&#123;booktabs,tabularx&#125;</span><br><span class="line"><span class="keyword">\newenvironment</span>&#123;mytable&#125;&#123;</span><br><span class="line">	<span class="keyword">\table</span>[ht]</span><br><span class="line">		<span class="keyword">\centering</span></span><br><span class="line">		<span class="keyword">\tabularx</span>&#123;<span class="keyword">\textwidth</span>&#125;&#123;lXr&#125;</span><br><span class="line">			<span class="keyword">\toprule</span></span><br><span class="line">			Name <span class="built_in">&amp;</span> Address <span class="built_in">&amp;</span> E-mail<span class="keyword">\\</span></span><br><span class="line">      <span class="keyword">\midrule</span></span><br><span class="line">&#125;&#123;<span class="keyword">\bottomrule</span><span class="keyword">\endtabularx</span><span class="keyword">\endtable</span>&#125;</span><br><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line">	<span class="keyword">\begin</span>&#123;mytable&#125;</span><br><span class="line">		Foo  <span class="built_in">&amp;</span> 111 Example Street <span class="built_in">&amp;</span> example@mail.example.net<span class="keyword">\\</span></span><br><span class="line">	<span class="keyword">\end</span>&#123;mytable&#125;</span><br><span class="line"><span class="keyword">\end</span>&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>或者，可以考虑把这类环境完整地放入一个参数中，使用其他参数输入需要输入的内容，如：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>&#123;article&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>&#123;booktabs,tabularx&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>&#123;xparse&#125;</span><br><span class="line"><span class="keyword">\NewDocumentEnvironment</span>&#123;mytable&#125;&#123;O&#123;htbp&#125; +b &#125;&#123;</span><br><span class="line">  <span class="keyword">\begin</span>&#123;table&#125;[<span class="params">#1</span>]</span><br><span class="line">    <span class="keyword">\centering</span></span><br><span class="line">    <span class="keyword">\begin</span>&#123;tabularx&#125;&#123;<span class="keyword">\textwidth</span>&#125;&#123;lXr&#125;</span><br><span class="line">      <span class="keyword">\toprule</span></span><br><span class="line">      Name <span class="built_in">&amp;</span> Address <span class="built_in">&amp;</span> E-mail<span class="keyword">\\</span> </span><br><span class="line">      <span class="keyword">\midrule</span></span><br><span class="line">      <span class="params">#2</span></span><br><span class="line">      <span class="keyword">\bottomrule</span></span><br><span class="line">    <span class="keyword">\end</span>&#123;tabularx&#125;</span><br><span class="line">  <span class="keyword">\end</span>&#123;table&#125;</span><br><span class="line">&#125;&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line">  <span class="keyword">\begin</span>&#123;mytable&#125;[ht]</span><br><span class="line">    Foo  <span class="built_in">&amp;</span> 111 Example Street <span class="built_in">&amp;</span> example@mail.example.net<span class="keyword">\\</span></span><br><span class="line">  <span class="keyword">\end</span>&#123;mytable&#125;</span><br><span class="line"><span class="keyword">\end</span>&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>二者实现同样的效果：<br />
+<img src="example1.png" alt="效果" /></p>
+<p><code>beamer</code> 包中的 <code>frame</code> 也是这样一种环境，因此，在使用 <code>markdown</code> 宏包来简化 <code>beamer</code> 文档源文件输入的时候，一般不能把 <code>\begin&#123;frame&#125;</code> 和 <code>\end&#123;frame&#125;</code> 设置隐藏在 <code>markdown</code> 格式中，而 <code>block</code> 环境没有这种特点，可以将其分别设置隐藏在 <code>markdown</code> 格式中，如：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>&#123;ctexbeamer&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>[footnotes,definitionLists,hashEnumerators,smartEllipses,tightLists=false,hybrid]&#123;markdown&#125;</span><br><span class="line"><span class="keyword">\markdownSetup</span>&#123;rendererPrototypes=&#123;</span><br><span class="line">  headingThree = &#123;<span class="keyword">\frametitle</span>&#123;<span class="params">#1</span>&#125;&#125;,</span><br><span class="line">  headingFour  = &#123;<span class="keyword">\begin</span>&#123;block&#125;&#123;<span class="params">#1</span>&#125;&#125;,</span><br><span class="line">  horizontalRule = &#123;<span class="keyword">\end</span>&#123;block&#125;&#125;</span><br><span class="line">&#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line"><span class="keyword">\begin</span>&#123;markdown&#125;</span><br><span class="line"><span class="keyword">\begin</span>&#123;frame&#125;</span><br><span class="line"></span><br><span class="line"><span class="params">###</span> 简介</span><br><span class="line"></span><br><span class="line">* 首先要说的是……</span><br><span class="line">* 再来呢……</span><br><span class="line">    - 不要忽略……</span><br><span class="line">    - 更要记得……</span><br><span class="line"></span><br><span class="line"><span class="params">####</span> 小提醒</span><br><span class="line"></span><br><span class="line">注意这个</span><br><span class="line"></span><br><span class="line">----</span><br><span class="line"></span><br><span class="line"><span class="keyword">\end</span>&#123;frame&#125;</span><br><span class="line"><span class="keyword">\end</span>&#123;markdown&#125;</span><br><span class="line"><span class="keyword">\end</span>&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>实现效果如下：<br />
+<img src="te-1.png" alt="效果" /></p>
 
     </div>
 
@@ -316,7 +284,7 @@ cond(no)->op2</textarea><textarea id="flowchart-0-options" style="display: none"
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://example.com/2021/01/22/%E9%81%93%E8%B7%AF%E6%8C%87%E5%AE%9A%E6%A1%A9%E5%8F%B7%E5%A4%84%E7%AE%A1%E7%BA%BF%E6%A0%87%E9%AB%98%E6%9F%A5%E8%AF%A2%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BC%96%E5%88%B6%E6%80%9D%E8%B7%AF/" title="道路指定桩号处管线标高查询程序的编制思路">http://example.com/2021/01/22/道路指定桩号处管线标高查询程序的编制思路/</a>
+    <a href="http://example.com/2021/03/12/Environment-redefination/" title="LaTeX 自定义时一些特殊环境的应用">http://example.com/2021/03/12/Environment-redefination/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -327,9 +295,9 @@ cond(no)->op2</textarea><textarea id="flowchart-0-options" style="display: none"
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/AutoCAD/" rel="tag"># AutoCAD</a>
-              <a href="/tags/AutoLisp-VisualLisp/" rel="tag"># AutoLisp/VisualLisp</a>
-              <a href="/tags/%E5%B8%82%E6%94%BF%E9%81%93%E8%B7%AF%E7%AE%A1%E7%BA%BF/" rel="tag"># 市政道路管线</a>
+              <a href="/tags/LaTeX/" rel="tag"># LaTeX</a>
+              <a href="/tags/LaTeX3/" rel="tag"># LaTeX3</a>
+              <a href="/tags/environment/" rel="tag"># environment</a>
           </div>
 
         
@@ -338,13 +306,10 @@ cond(no)->op2</textarea><textarea id="flowchart-0-options" style="display: none"
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/01/22/%E5%88%A9%E7%94%A8TECKit%E6%98%A0%E5%B0%84%E5%AD%97%E7%AC%A6%E7%9A%84%E6%96%B9%E6%B3%95/" rel="prev" title="LaTeX 利用 TECKit 映射字符的方法">
-      <i class="fa fa-chevron-left"></i> LaTeX 利用 TECKit 映射字符的方法
+    <a href="/2021/02/09/PDF-utility/" rel="prev" title="关于 PDF 文件的一些实用程序">
+      <i class="fa fa-chevron-left"></i> 关于 PDF 文件的一些实用程序
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/01/25/AutoCAD2021%E6%96%B0%E7%89%B9%E6%80%A7%E5%B8%A6%E6%9D%A5%E7%9A%84%E9%97%AE%E9%A2%98/" rel="next" title="AutoCAD2021新特性带来的问题">
-      AutoCAD2021新特性带来的问题 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -404,7 +369,6 @@ cond(no)->op2</textarea><textarea id="flowchart-0-options" style="display: none"
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E9%9C%80%E8%A6%81%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E5%AF%B9%E7%AD%96"><span class="nav-number">1.</span> <span class="nav-text"> 程序需要解决的问题及对策</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%93%E8%B7%AF%E4%B8%AD%E7%BA%BF%E4%B8%8E%E9%81%93%E8%B7%AF%E8%B7%AF%E9%9D%A2%E7%9A%84%E8%A1%A8%E8%BE%BE"><span class="nav-number">1.1.</span> <span class="nav-text"> 道路中线与道路路面的表达</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E6%8C%87%E5%AE%9A%E6%A1%A9%E5%8F%B7%E7%9B%B8%E5%85%B3%E7%9A%84%E6%89%80%E6%9C%89%E7%AE%A1%E7%BA%BF%E7%9A%84%E9%80%89%E5%8F%96"><span class="nav-number">1.2.</span> <span class="nav-text"> 与指定桩号相关的所有管线的选取</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%A4%A7%E6%A6%82%E6%A1%86%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text"> 程序的大概框图</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
