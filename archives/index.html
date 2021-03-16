@@ -635,25 +635,6 @@ if (document.querySelectorAll('pre.mermaid').length) {
 </script>
 
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
-
-<script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : '844f26f6f4734c6222e7',
-      clientSecret: '491c034cb9097208f22a2aea8d056374b007daf1',
-      repo        : 'chennanzhang.github.io',
-      owner       : 'chennanzhang',
-      admin       : ['chennanzhang'],
-      id          : '3be7aa98d992907175cbd79c194399f2',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
-</script>
 
 
 <script type="text/javascript">
