@@ -28,7 +28,7 @@
 <meta property="og:description" content="在一些中文 LaTeX\LaTeXLATE​X 社区总会有人拿出祖传的文档模板，在 TeXLive 中进行编译，然后发现不能进行编译。这些文档有一些特点：  文档使用 GBK 编码； 使用 latex →\to→ dvips →\to→ ps2pdf 、latex →\to→ dvipdfm(x) 或 pdflatex 进行编译； 裸用 CJK 宏包进行中文支持，文档中充斥了 \begin&amp;#12">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-26T09:37:20.000Z">
-<meta property="article:modified_time" content="2021-03-30T09:52:04.382Z">
+<meta property="article:modified_time" content="2021-03-30T09:56:21.095Z">
 <meta property="article:author" content="Chennan ZHANG">
 <meta property="article:tag" content="LaTeX">
 <meta property="article:tag" content="fragile commands">
@@ -196,7 +196,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-30 17:52:04" itemprop="dateModified" datetime="2021-03-30T17:52:04+08:00">2021-03-30</time>
+                <time title="修改时间：2021-03-30 17:56:21" itemprop="dateModified" datetime="2021-03-30T17:56:21+08:00">2021-03-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -256,8 +256,7 @@
 <p>这个程序编写之际 Windows 版本大概还是 Win2000，所以指向系统路径还是<code>C:/winnt</code>，这里我们将其替换为 Win10 的系统路径。同时，应注意到新的中易宋体的文件采用的是 <code>simsun.ttc</code> 格式，因此需要一并修改为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gbkfonts -c -gbk c:&#x2F;windows&#x2F;fonts&#x2F;simsun.ttc  song</span><br><span class="line">gbkfonts -c -gbk c:&#x2F;windows&#x2F;fonts&#x2F;simhei.ttf  hei</span><br><span class="line">gbkfonts -c -gbk c:&#x2F;windows&#x2F;fonts&#x2F;simkai.ttf  kai</span><br><span class="line">gbkfonts -c -gbk c:&#x2F;windows&#x2F;fonts&#x2F;simfang.ttf fs</span><br></pre></td></tr></table></figure>
 <p>这其中，<code>song</code>、<code>hei</code>、<code>kai</code>、<code>fs</code> 即为字体族名称，也就是 <code>CJK</code> 环境的第二个参数。当然，这个文件还可以继续补充其他字体，只要依照相似的格式继续列在后面，并且，如果在 <code>gbkfonts.ini</code> 中没有该字体的相关信息，也需要在 <code>gbkfonts.ini</code> 中依样补充。考虑我们只是为了能编译古老的模板，而这类模板一般不会出现这四类以外的字体，所以也就不考虑另外增添字体了。</p>
-<p>文件修改完成之后，双击或命令行运行 <code>go.bat</code>，然后就可以去泡杯茶耐心地进行等待了，转换字体需要一段的时间。一段时间后，该文件夹下将新增<br />
-五个文件夹和若干配置文件。这些文件需要我们放置到系统本地 TDS 下进行配置。</p>
+<p>文件修改完成之后，双击或命令行运行 <code>go.bat</code>，然后就可以去泡杯茶耐心地进行等待了，转换字体需要一段的时间。一段时间后，该文件夹下将新增五个文件夹和若干配置文件。这些文件需要我们放置到系统本地 TDS 下进行配置。</p>
 <ul>
 <li>将 <code>./fonts</code> 下全部内容复制到 <code>texmf-local/fonts</code> 下</li>
 <li>将 <code>./tex</code> 下全部内容复制到 <code>texmf-local/tex</code> 下</li>
@@ -619,25 +618,6 @@ if (document.querySelectorAll('pre.mermaid').length) {
 </script>
 
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
-
-<script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : '844f26f6f4734c6222e7',
-      clientSecret: '491c034cb9097208f22a2aea8d056374b007daf1',
-      repo        : 'chennanzhang.github.io',
-      owner       : 'chennanzhang',
-      admin       : ['chennanzhang'],
-      id          : '24c647be54d010cbd6ed1c80c3ce5d32',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
-});
-</script>
 
 
 <script type="text/javascript">
