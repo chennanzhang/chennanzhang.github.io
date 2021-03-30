@@ -28,7 +28,7 @@
 <meta property="og:description" content="在一些中文 LaTeX\LaTeXLATE​X 社区总会有人拿出祖传的文档模板，在 TeXLive 中进行编译，然后发现不能进行编译。这些文档有一些特点：  文档使用 GBK 编码； 使用 latex →\to→ dvips →\to→ ps2pdf 、latex →\to→ dvipdfm(x) 或 pdflatex 进行编译； 裸用 CJK 宏包进行中文支持，文档中充斥了 \begin&amp;#12">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-03-26T09:37:20.000Z">
-<meta property="article:modified_time" content="2021-03-30T09:56:21.095Z">
+<meta property="article:modified_time" content="2021-03-30T09:59:13.871Z">
 <meta property="article:author" content="Chennan ZHANG">
 <meta property="article:tag" content="LaTeX">
 <meta property="article:tag" content="fragile commands">
@@ -196,7 +196,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-03-30 17:56:21" itemprop="dateModified" datetime="2021-03-30T17:56:21+08:00">2021-03-30</time>
+                <time title="修改时间：2021-03-30 17:59:13" itemprop="dateModified" datetime="2021-03-30T17:59:13+08:00">2021-03-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -271,8 +271,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">texhash</span><br></pre></td></tr></table></figure>
 <p>至此，<code>dvips</code> 即可使用中文 type1 字体。</p>
 <h1 id="让-pdflatex-使用-ttf-中文字体"><a class="markdownIt-Anchor" href="#让-pdflatex-使用-ttf-中文字体"></a> 让 <code>pdflatex</code> 使用 TTF 中文字体</h1>
-<p>将系统 TDS <code>texmf-var/fonts/map/pdftex/updmap/pdftex.map</code> 复制到 <code>texmf-local/fonts/map/pdftex/pdftex.map</code>，将生成的 <code>./pdftex/config/gbk*.map</code> 的文件内容添加到 <code>pdftex.map</code> 文件的末尾。然后将<br />
-生成的 <code>./dvips/chinese/</code>下所有内容复制到 <code>texmf-local/fonts/enc/pdftex</code> 下（这一步我不确定是不是有必要）。最后在命令行内运行：</p>
+<p>将系统 TDS <code>texmf-var/fonts/map/pdftex/updmap/pdftex.map</code> 复制到 <code>texmf-local/fonts/map/pdftex/pdftex.map</code>，将生成的 <code>./pdftex/config/gbk*.map</code> 的文件内容添加到 <code>pdftex.map</code> 文件的末尾。然后将生成的 <code>./dvips/chinese/</code>下所有内容复制到 <code>texmf-local/fonts/enc/pdftex</code> 下（这一步我不确定是不是有必要）。最后在命令行内运行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">texhash</span><br></pre></td></tr></table></figure>
 <p>至此，<code>pdflatex</code> 可以使用 TTF 字体编译中文文件。</p>
 <h1 id="让-dvipdfm-使用-type1-中文字体"><a class="markdownIt-Anchor" href="#让-dvipdfm-使用-type1-中文字体"></a> 让 <code>dvipdfm</code> 使用 Type1 中文字体</h1>
