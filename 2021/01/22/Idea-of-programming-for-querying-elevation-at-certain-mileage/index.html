@@ -20,21 +20,22 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="我准备在过年期间把家里的老机器重新收拾一下，老伙计的硬件估计已经跑不动一般的 Windows 10 了，于是准备弄个 Win10 LTSC 跑跑看。系统安装完成以后还需要进行一些设置，这样自己才能用的更方便。这些设置以前都是重装系统后现上网查，从来没记录下来。现在把这些小 trick 记录在这里，等哪天又要重装系统时，就可以在自己的网页上查找了。当然，现在这篇文章是不完整的，正文中全是坑，等坑填完">
+  <meta name="description" content="两天前，有道路专业的同事找我帮忙解决一个问题：  既有一个 *.dwg 文件，存储了大量片区管线资料，管线按实际位置以空间直线（LINE）而非空间多段线（POLYLINE）的形式存储，不同类型的管线分图层存储，现需要沿道路中心线按给定桩号间隔读取道路宽度范围内所有管线的标高或埋深，希望能有比较便捷的程序进行处理。  说实话，这个问题在 AutoCAD 中的解决方法并不是很困难，只是过程相对繁琐，并">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Windows系统安装后的一些琐碎设置">
-<meta property="og:url" content="http://example.com/2021/01/25/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E%E8%AE%BE%E7%BD%AE/index.html">
+<meta property="og:title" content="道路指定桩号处管线标高查询程序的编制思路">
+<meta property="og:url" content="http://example.com/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/index.html">
 <meta property="og:site_name" content="极客斋">
-<meta property="og:description" content="我准备在过年期间把家里的老机器重新收拾一下，老伙计的硬件估计已经跑不动一般的 Windows 10 了，于是准备弄个 Win10 LTSC 跑跑看。系统安装完成以后还需要进行一些设置，这样自己才能用的更方便。这些设置以前都是重装系统后现上网查，从来没记录下来。现在把这些小 trick 记录在这里，等哪天又要重装系统时，就可以在自己的网页上查找了。当然，现在这篇文章是不完整的，正文中全是坑，等坑填完">
+<meta property="og:description" content="两天前，有道路专业的同事找我帮忙解决一个问题：  既有一个 *.dwg 文件，存储了大量片区管线资料，管线按实际位置以空间直线（LINE）而非空间多段线（POLYLINE）的形式存储，不同类型的管线分图层存储，现需要沿道路中心线按给定桩号间隔读取道路宽度范围内所有管线的标高或埋深，希望能有比较便捷的程序进行处理。  说实话，这个问题在 AutoCAD 中的解决方法并不是很困难，只是过程相对繁琐，并">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2021-01-25T13:51:26.000Z">
-<meta property="article:modified_time" content="2021-01-26T01:31:53.970Z">
+<meta property="article:published_time" content="2021-01-22T06:37:26.000Z">
+<meta property="article:modified_time" content="2021-01-29T05:22:58.361Z">
 <meta property="article:author" content="Chennan ZHANG">
-<meta property="article:tag" content="Windows">
-<meta property="article:tag" content="OS">
+<meta property="article:tag" content="AutoCAD">
+<meta property="article:tag" content="AutoLisp&#x2F;VisualLisp">
+<meta property="article:tag" content="市政道路管线">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2021/01/25/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E%E8%AE%BE%E7%BD%AE/">
+<link rel="canonical" href="http://example.com/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/">
 
 
 <script id="page-configurations">
@@ -47,7 +48,7 @@
   };
 </script>
 
-  <title>Windows系统安装后的一些琐碎设置 | 极客斋</title>
+  <title>道路指定桩号处管线标高查询程序的编制思路 | 极客斋</title>
   
 
 
@@ -165,7 +166,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/25/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E%E8%AE%BE%E7%BD%AE/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -178,7 +179,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Windows系统安装后的一些琐碎设置
+          道路指定桩号处管线标高查询程序的编制思路
         </h1>
 
         <div class="post-meta">
@@ -188,14 +189,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-01-25 21:51:26" itemprop="dateCreated datePublished" datetime="2021-01-25T21:51:26+08:00">2021-01-25</time>
+              <time title="创建时间：2021-01-22 14:37:26" itemprop="dateCreated datePublished" datetime="2021-01-22T14:37:26+08:00">2021-01-22</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-01-26 09:31:53" itemprop="dateModified" datetime="2021-01-26T09:31:53+08:00">2021-01-26</time>
+                <time title="修改时间：2021-01-29 13:22:58" itemprop="dateModified" datetime="2021-01-29T13:22:58+08:00">2021-01-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -223,8 +224,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/01/25/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E%E8%AE%BE%E7%BD%AE/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/25/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E%E8%AE%BE%E7%BD%AE/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -239,13 +240,47 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>我准备在过年期间把家里的老机器重新收拾一下，老伙计的硬件估计已经跑不动一般的 Windows 10 了，于是准备弄个 Win10 LTSC 跑跑看。系统安装完成以后还需要进行一些设置，这样自己才能用的更方便。这些设置以前都是重装系统后现上网查，从来没记录下来。现在把这些小 trick 记录在这里，等哪天又要重装系统时，就可以在自己的网页上查找了。当然，现在这篇文章是不完整的，正文中全是坑，等坑填完了，这句话自然就删掉了。</p>
+        <p>两天前，有道路专业的同事找我帮忙解决一个问题：</p>
+<blockquote>
+<p>既有一个 <code>*.dwg</code> 文件，存储了大量片区管线资料，管线按实际位置以空间直线（<code>LINE</code>）而非空间多段线（<code>POLYLINE</code>）的形式存储，不同类型的管线分图层存储，现需要沿道路中心线按给定桩号间隔读取道路宽度范围内所有管线的标高或埋深，希望能有比较便捷的程序进行处理。</p>
+</blockquote>
+<p>说实话，这个问题在 AutoCAD 中的解决方法并不是很困难，只是过程相对繁琐，并且算法处理不好时，时间复杂度会比较高，如果是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 级别的时间复杂度则是不能接受的。就在我基本考虑好这个问题并准备编写代码时，<strong>需求</strong> 变了！！！用户希望自行在管线上选取一点读出管线在该位置的标高并标注在图中。这个需求大大降低了程序编制的难度（程序员碰到这种产品经理或用户真要开心死了）。当天吃完午饭后午休时间，用了二十分钟不到的时间，我写完了这段代码（主程序代码都不超过 20 行）。考虑到前面的需求已经进行了一定程度的思索，我在这里把程序编制的思路写下来，以便将来遇到类似的问题可以用得上，同时也测试一下 <code>hexo</code> 的 <code>next</code> 主题下 <code>markdown</code> 中 <code>mermaid</code> 图形生成静态网页的情况。</p>
 <a id="more"></a>
-<h1 id="禁止流氓软件的运行"><a class="markdownIt-Anchor" href="#禁止流氓软件的运行"></a> 禁止流氓软件的运行</h1>
-<p>Windows 系统中一个超级讨厌的问题是各种流氓软件的肆虐。所以在干净的系统中第一个要做的事情就是先设置本地安全策略，禁止任何流氓软件公司发布的可执行文件运行。这需要以下几个步骤。</p>
-<p>（时代在进步，流氓软件也在进步，禁用证书的方式居然不行了。。。接下来找到新的方式再把坑填上。我就不信还治不了这个红衣绿帽的。）</p>
-<h1 id="获取当前文件夹的所有权限"><a class="markdownIt-Anchor" href="#获取当前文件夹的所有权限"></a> 获取当前文件夹的所有权限</h1>
-<h1 id=""><a class="markdownIt-Anchor" href="#"></a> </h1>
+<h1 id="程序需要解决的问题及对策"><a class="markdownIt-Anchor" href="#程序需要解决的问题及对策"></a> 程序需要解决的问题及对策</h1>
+<h2 id="道路中线与道路路面的表达"><a class="markdownIt-Anchor" href="#道路中线与道路路面的表达"></a> 道路中线与道路路面的表达</h2>
+<p>道路中心线与道路路面的表达在我自己编写的 <code>BRTools</code> 中已经有了解决办法，道路中心线用连成一体的轻量化多段线（<code>LWPOLYLINE</code>）进行表达，路面信息可以通过竖曲线扩展数据和超高扩展数据进行表达，简言之，对于给定的道路中心线，能够得到任一道路里程点切线和法线方向，加上道路竖曲线、超高信息，就能够得到路面上任一位置的高程。这里，<code>BRTools</code> 对超高的处理不是太完善，变宽路面好像没有考虑（毕竟这是十年前编写的东西，我又不是学道路专业的，真的记不清楚了），可能需要再进行一些补充。</p>
+<h2 id="与指定桩号相关的所有管线的选取"><a class="markdownIt-Anchor" href="#与指定桩号相关的所有管线的选取"></a> 与指定桩号相关的所有管线的选取</h2>
+<p>这个问题是完成整个程序编写的关键，需求变更时把这一步由用户自行选择就大大降低了问题的复杂程度。如果需求仍然是由道路桩号决定，那么就需要求取各种管线与<strong>道路里程点的法平面</strong>之交点。空间直线段与某平面的交点可以通过坐标变换的方式容易求取，假设空间直线段起终点在世界坐标系（<code>WCS</code>）中坐标表分别为变量 <code>pts</code>、<code>pte</code>，平面的法向量为 <code>normal</code>，该平面上的某点坐标变量为 <code>ptm</code>，则：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> pts (<span class="name">trans</span> pts <span class="number">0</span> normal) </span><br><span class="line">      pte (<span class="name">trans</span> pte <span class="number">0</span> normal)</span><br><span class="line">      ptm (<span class="name">trans</span> ptm <span class="number">0</span> normal))</span><br></pre></td></tr></table></figure>
+<p>则将 <code>pts</code>、<code>pte</code>、<code>ptm</code> 均转换成为以 <code>normal</code> 为法线的对象坐标系（<code>OCS</code>）坐标，若  <code>ptm</code> 的 Z 坐标介于 <code>pts</code> 与 <code>pte</code> 的 Z 坐标之间，则该线段与平面必然存在交点。容易理解但啰嗦的写法是：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">or</span> </span><br><span class="line">  (<span class="name">&lt;</span> (<span class="name">caddr</span> pts) (<span class="name">caddr</span> ptm) (<span class="name">caddr</span> pte)) </span><br><span class="line">  (<span class="name">&gt;</span> (<span class="name">caddr</span> pts) (<span class="name">caddr</span> ptm) (<span class="name">caddr</span> pte)))</span><br></pre></td></tr></table></figure>
+<p>不太容易理解但好扩展的炫技写法是：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">apply</span> &#x27;or </span><br><span class="line">  (<span class="name">mapcar</span> </span><br><span class="line">    &#x27;(lambda(x) </span><br><span class="line">      (cons x (mapcar &#x27;caddr (list pts ptm pte)))) </span><br><span class="line">    (<span class="name">list</span> &#x27;&gt; &#x27;&lt;)))</span><br></pre></td></tr></table></figure>
+<p>若上面表达式值为 <code>T</code>，则直线段与平面的交点坐标为：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">trans</span> </span><br><span class="line">  (<span class="name">inters</span> </span><br><span class="line">    pts </span><br><span class="line">    pte </span><br><span class="line">    (<span class="name">list</span> (<span class="name">car</span> pts) (<span class="name">cadr</span> pts) (<span class="name">caddr</span> ptm)) </span><br><span class="line">    (<span class="name">list</span> (<span class="name">car</span> pte) (<span class="name">cadr</span> pte) (<span class="name">caddr</span> ptm)) </span><br><span class="line">    T) </span><br><span class="line">  normal <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>这个很好理解，就是空间直线段与其在平面上的投影的交点。</p>
+<p>目前为止，道路中心线某一里程点的法平面很容易确定，因此只需要遍历所有管线，判断其是否与法平面相交，若相交则求取交点，并结合管线的其他信息存储在一个表中。这时存在一个问题，管线的图元数量巨大，且对于某一里程点来说，大部分管线是不与道路里程点的法平面相交的，为了避免这些无意义的计算与判断，必须进行过滤选择。AutoLisp 中的 <code>ssget</code> 函数提供了很多过滤功能，其中 <code>f</code> 选项可以通过两点画线相交的方式进行过滤选择。我从前不确定这种选择方式是否在图形屏幕区以外的部分能够将图元选择上，所以一直都不常使用这种过滤方式，如今进行一下测试，即使是不在 AutoCAD 图形屏幕区范围内的图元也能够被选中，那么问题就相对简单了，只需要</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> ss (<span class="name">ssget</span> <span class="string">&quot;f&quot;</span> (<span class="name">list</span> pt1 pt2) (<span class="name">list</span> (<span class="number">0</span> . <span class="string">&quot;LINE&quot;</span>) (<span class="name">cons</span> <span class="number">8</span> layer))))</span><br></pre></td></tr></table></figure>
+<p>就可以将 <code>pt1</code>、<code>pt2</code> 两点连线划中的位于 <code>layer</code> 图层的 <code>LINE</code> 图元全部选中，置于 <code>ss</code> 选择集中。<code>pt1</code> 和 <code>pt2</code> 可以考虑使用道路中心线正负法向距离为道路半宽的点。至此，程序的主要问题就解决了。</p>
+<h1 id="程序的大概框图"><a class="markdownIt-Anchor" href="#程序的大概框图"></a> 程序的大概框图</h1>
+<p>其实本文没有什么值得记录的意义，我只是想在这里尝试一下 <code>hexo</code> 的<code>next</code> 主题下 <code>markdown</code> 中的 <code>mermaid</code> 或 <code>flow</code> 图形生成静态网页的情况。现在看来，实现没有问题，需要做的事情是装两个插件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-filter-flowchart</span><br></pre></td></tr></table></figure>
+<p>以及</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-filter-mermaid-diagrams</span><br></pre></td></tr></table></figure>
+<p>这个程序的框图可以表现为：</p>
+<div id="flowchart-0" class="flow-chart"></div>
+<p>嗯，说老实话，<code>flow</code> 的效果实在是太 <strong>丑陋</strong> 了，赶明儿个用 <code>graph</code> 写写试试。<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 开始
+op1=>operation: 获取特定里程点表
+op2=>operation: 获取下一个里程点相关信息
+op3=>operation: 形成相关管线选择集
+op4=>operation: 遍历选择集，加入信息表
+cond=>condition: 里程点表是否遍历完成?
+op5=>operation: 信息标注处理
+e=>end: 结束
+
+st->op1->op2->op3->op4->cond
+cond(yes)->op5->e
+cond(no)->op2</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></p>
 
     </div>
 
@@ -281,7 +316,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://example.com/2021/01/25/Windows%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E5%90%8E%E7%9A%84%E4%B8%80%E4%BA%9B%E7%90%90%E7%A2%8E%E8%AE%BE%E7%BD%AE/" title="Windows系统安装后的一些琐碎设置">http://example.com/2021/01/25/Windows系统安装后的一些琐碎设置/</a>
+    <a href="http://example.com/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/" title="道路指定桩号处管线标高查询程序的编制思路">http://example.com/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -292,8 +327,9 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Windows/" rel="tag"># Windows</a>
-              <a href="/tags/OS/" rel="tag"># OS</a>
+              <a href="/tags/AutoCAD/" rel="tag"># AutoCAD</a>
+              <a href="/tags/AutoLisp-VisualLisp/" rel="tag"># AutoLisp/VisualLisp</a>
+              <a href="/tags/%E5%B8%82%E6%94%BF%E9%81%93%E8%B7%AF%E7%AE%A1%E7%BA%BF/" rel="tag"># 市政道路管线</a>
           </div>
 
         
@@ -302,12 +338,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/01/25/AutoCAD2021-new-feature/" rel="prev" title="AutoCAD2021新特性带来的问题">
-      <i class="fa fa-chevron-left"></i> AutoCAD2021新特性带来的问题
+    <a href="/2021/01/22/Method-of-mapping-characters-with-TECKit/" rel="prev" title="LaTeX 利用 TECKit 映射字符的方法">
+      <i class="fa fa-chevron-left"></i> LaTeX 利用 TECKit 映射字符的方法
     </a></div>
       <div class="post-nav-item">
-    <a href="/2021/01/26/VSCode-setting-for-LaTeX/" rel="next" title="VS Code 作为 LaTeX 前端编辑器的配置">
-      VS Code 作为 LaTeX 前端编辑器的配置 <i class="fa fa-chevron-right"></i>
+    <a href="/2021/01/25/AutoCAD2021-new-feature/" rel="next" title="AutoCAD2021新特性带来的问题">
+      AutoCAD2021新特性带来的问题 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -368,7 +404,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A6%81%E6%AD%A2%E6%B5%81%E6%B0%93%E8%BD%AF%E4%BB%B6%E7%9A%84%E8%BF%90%E8%A1%8C"><span class="nav-number">1.</span> <span class="nav-text"> 禁止流氓软件的运行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9A%84%E6%89%80%E6%9C%89%E6%9D%83%E9%99%90"><span class="nav-number">2.</span> <span class="nav-text"> 获取当前文件夹的所有权限</span></a></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-number">3.</span> <span class="nav-text"> </span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E9%9C%80%E8%A6%81%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E5%AF%B9%E7%AD%96"><span class="nav-number">1.</span> <span class="nav-text"> 程序需要解决的问题及对策</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%93%E8%B7%AF%E4%B8%AD%E7%BA%BF%E4%B8%8E%E9%81%93%E8%B7%AF%E8%B7%AF%E9%9D%A2%E7%9A%84%E8%A1%A8%E8%BE%BE"><span class="nav-number">1.1.</span> <span class="nav-text"> 道路中线与道路路面的表达</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E6%8C%87%E5%AE%9A%E6%A1%A9%E5%8F%B7%E7%9B%B8%E5%85%B3%E7%9A%84%E6%89%80%E6%9C%89%E7%AE%A1%E7%BA%BF%E7%9A%84%E9%80%89%E5%8F%96"><span class="nav-number">1.2.</span> <span class="nav-text"> 与指定桩号相关的所有管线的选取</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%A4%A7%E6%A6%82%E6%A1%86%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text"> 程序的大概框图</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
