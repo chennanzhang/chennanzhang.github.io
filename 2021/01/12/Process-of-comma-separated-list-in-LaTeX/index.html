@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/name.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/books.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/books.ico">
+  <link rel="mask-icon" href="/images/name.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chennanzhang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="这两天在写一个文档的模板，其中需要用到逗号分隔列表来遍历处理分隔的各项条目。最开始的时候把问题考虑复杂了，最后查阅了 LaTeX3 的手册——Source3.pdf，使用 LaTeX3 方法解决了问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LaTeX 里逗号分隔列表的处理">
+<meta property="og:url" content="http://chennanzhang.github.io/2021/01/12/Process-of-comma-separated-list-in-LaTeX/index.html">
+<meta property="og:site_name" content="极客斋">
+<meta property="og:description" content="这两天在写一个文档的模板，其中需要用到逗号分隔列表来遍历处理分隔的各项条目。最开始的时候把问题考虑复杂了，最后查阅了 LaTeX3 的手册——Source3.pdf，使用 LaTeX3 方法解决了问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-12T09:28:05.000Z">
+<meta property="article:modified_time" content="2021-01-12T16:53:59.125Z">
+<meta property="article:author" content="Chennan ZHANG">
+<meta property="article:tag" content="LaTeX">
+<meta property="article:tag" content="LaTeX3">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://chennanzhang.github.io/2021/01/12/Process-of-comma-separated-list-in-LaTeX/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>LaTeX 里逗号分隔列表的处理 | 极客斋</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="极客斋" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">极客斋</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+  <a href="https://github.com/chennanzhang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://chennanzhang.github.io/2021/01/12/Process-of-comma-separated-list-in-LaTeX/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chennan ZHANG">
+      <meta itemprop="description" content="且把浮名换了浅斟低唱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极客斋">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LaTeX 里逗号分隔列表的处理
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-12 17:28:05" itemprop="dateCreated datePublished" datetime="2021-01-12T17:28:05+08:00">2021-01-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-13 00:53:59" itemprop="dateModified" datetime="2021-01-13T00:53:59+08:00">2021-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">计算机技术</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/01/12/Process-of-comma-separated-list-in-LaTeX/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/12/Process-of-comma-separated-list-in-LaTeX/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>这两天在写一个文档的模板，其中需要用到逗号分隔列表来遍历处理分隔的各项条目。最开始的时候把问题考虑复杂了，最后查阅了 LaTeX3 的手册——<code>Source3.pdf</code>，使用 LaTeX3 方法解决了问题。</p>
+<span id="more"></span>
+<h1 id="问题描述"><a class="markdownIt-Anchor" href="#问题描述"></a> 问题描述</h1>
+<p>以一个简单的例子来说，现有一列表示桥型的名称如：<code>简支梁桥</code>、<code>连续梁桥</code>、<code>拱桥</code>、<code>桁架桥</code>、<code>斜拉桥</code>、<code>悬索桥</code>……同时还有这些桥型对应的桥梁数量，存储在名为 <code>&lt;桥型&gt;</code>+<code>数量</code> 的宏命令中，如 <code>\简支梁桥数量</code>、<code>\连续梁桥数量</code>、<code>\拱桥数量</code>、<code>\桁架桥数量</code>、<code>\斜拉桥数量</code>、<code>\悬索桥数量</code>…… （不用惊奇，<code>xelatex</code> 作为编译引擎时可以使用 CJK 字符作为宏命令字符。）现在的问题是：如何设计一个宏命令 <code>\桥型调查&#123;&lt;调查列表&gt;&#125;</code> 在其展开后能够形成：</p>
+<blockquote>
+<p>调查的桥型包括：简支梁桥、连续梁桥、……、斜拉桥以及悬索桥，其中：简支梁桥的数量为 xx 座，连续梁桥的数量为 yy 座，……，悬索桥的数量为 xx 座。</p>
+</blockquote>
+<p>这样的段落结构，其中，罗列的桥型则由这个宏命令的参数 <code>&lt;调查列表&gt;</code> 进行控制。</p>
+<h1 id="解决办法"><a class="markdownIt-Anchor" href="#解决办法"></a> 解决办法</h1>
+<h2 id="给定条件"><a class="markdownIt-Anchor" href="#给定条件"></a> 给定条件</h2>
+<p>先把给定的条件用 <code>LaTeX</code> 语句写出来：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\def</span><span class="keyword">\简</span>支梁桥数量&#123;7&#125;</span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\连</span>续梁桥数量&#123;8&#125;</span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\拱</span>桥数量&#123;5&#125;</span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\桁</span>架桥数量&#123;4&#125;</span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\斜</span>拉桥数量&#123;6&#125;</span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\悬</span>索桥数量&#123;3&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="分析解决简单的问题"><a class="markdownIt-Anchor" href="#分析解决简单的问题"></a> 分析解决简单的问题</h2>
+<p>在这个问题中，显然描述一种桥型数量的语句是最为容易定义的，不妨定义一个带单参数的宏命令：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\newcommand</span><span class="keyword">\CountBridge</span>[1]&#123;<span class="params">#1</span>的数量为<span class="keyword">\@nameuse</span>&#123;<span class="params">#1</span>数量&#125;座&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，这一个命令的定义使用了内部命令 <code>\@nameuse</code>，所以定义的语句一定要放在 <code>\makeatletter</code> 和 <code>\makeatother</code> 之间。这时，可以将 <code>\CountBridge</code> 这条语句在 <code>ctexart</code> 等支持中文的文档类中进行一个试验，就能得到：</p>
+<blockquote>
+<p>悬索桥的数量是 3 座</p>
+</blockquote>
+<p>如果需要进行遍历执行 <code>\CountBridge</code>，一般首先想到的就是 <code>pgffor</code> 宏包中的 <code>\foreach</code>（反正我不是很推荐使用内部命令 <code>\@for \xx:=\set \do &#123;...&#125;</code> 这种方式）。可以利用 <code>xparse</code> 包提供的定义命令的方法：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\NewDocumentCommand</span><span class="keyword">\ListCountI</span>&#123;m&#125;&#123;</span><br><span class="line">  <span class="keyword">\foreach</span> <span class="keyword">\x</span> in &#123;简支梁桥,悬索桥,斜拉桥&#125; &#123;<span class="keyword">\CountBridge</span>&#123;<span class="keyword">\x</span>&#125;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者使用 <code>xparse</code> 包中提供的 <code>\SplitList</code> 和 <code>\ProcessList</code> 定义：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\NewDocumentCommand</span><span class="keyword">\ListCountII</span>&#123;&gt;&#123;<span class="keyword">\SplitList</span>&#123;,&#125;&#125;m&#125;&#123;</span><br><span class="line">  <span class="keyword">\ProcessList</span>&#123;<span class="params">#1</span>&#125;<span class="keyword">\CountBridge</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果显示的都是：</p>
+<blockquote>
+<p>简支梁桥的数量为 7 座悬索桥的数量为 3 座斜拉桥的数量为 6 座</p>
+</blockquote>
+<p>而语句：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\foreach</span> <span class="keyword">\x</span> in &#123;简支梁桥,悬索桥,斜拉桥&#125; &#123;<span class="keyword">\x</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>显示的则是：</p>
+<blockquote>
+<p>简支梁桥悬索桥斜拉桥</p>
+</blockquote>
+<p>显然，现在遇到的问题是条目项之间的分隔问题。</p>
+<h2 id="条目间的分隔问题"><a class="markdownIt-Anchor" href="#条目间的分隔问题"></a> 条目间的分隔问题</h2>
+<p>很显然，直接在遍历循环体内添加分隔标点符号是不合适的，无论是修改 <code>\foreach</code> 的遍历循环体：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\foreach</span> <span class="keyword">\x</span> in &#123;简支梁桥,悬索桥,斜拉桥&#125; &#123;<span class="keyword">\CountBridge</span>&#123;<span class="keyword">\x</span>&#125;，&#125;</span><br><span class="line"><span class="keyword">\foreach</span> <span class="keyword">\x</span> in &#123;简支梁桥,悬索桥,斜拉桥&#125; &#123;，<span class="keyword">\CountBridge</span>&#123;<span class="keyword">\x</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>抑或是修改 <code>\CountBridge</code> 的定义：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\newcommand</span><span class="keyword">\CountBridge</span>[1]&#123;<span class="params">#1</span>的数量为<span class="keyword">\@nameuse</span>&#123;<span class="params">#1</span>数量&#125;座，&#125;</span><br><span class="line"><span class="keyword">\newcommand</span><span class="keyword">\CountBridge</span>[1]&#123;，<span class="params">#1</span>的数量为<span class="keyword">\@nameuse</span>&#123;<span class="params">#1</span>数量&#125;座&#125;</span><br></pre></td></tr></table></figure>
+<p>都会多出来一个不必要的分隔符号，因此需要使用一个判断语句来选择是否输出这个分隔符号。这两种解决方案中，前一条语句需要判断当前处理项是否为最末项，后一条语句则需要判断当前处理项是否为首项。显然，判断首项比判断末项容易得多，接下来就以判断首项决定输出的思路进行设计，这里有相对优雅和相对不优雅的两种做法。</p>
+<h3 id="不优雅的做法"><a class="markdownIt-Anchor" href="#不优雅的做法"></a> 不优雅的做法</h3>
+<p>不优雅的做法适用于修改 <code>\CountBridge</code> 的定义的方法，这时要直接粗暴地创建一个 <code>bool</code> 变量，在 <code>\CountBridge</code> 中进行判断分支，做法如下：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\newif</span><span class="keyword">\iffirstitem</span><span class="keyword">\firstitemtrue</span></span><br><span class="line"><span class="keyword">\newcommand</span><span class="keyword">\CountBridge</span>[1]&#123;<span class="comment">%</span></span><br><span class="line">  <span class="keyword">\iffirstitem</span><span class="keyword">\firstitemfalse</span><span class="keyword">\else</span>，<span class="keyword">\fi</span><span class="params">#1</span>的数量为<span class="keyword">\@nameuse</span>&#123;<span class="params">#1</span>数量&#125;座&#125;</span><br></pre></td></tr></table></figure>
+<p>这种做法不优雅之处在于，经过执行 <code>\CountBridge</code> 后，<code>\iffirstitem</code> 的值一定为 <code>false</code>，必须通过 <code>\firstitemtrue</code> 来把其值改为 <code>true</code>，否则，当执行另一个列表时，首项前一定多一个分隔标点符号。<code>\firstitemtrue</code> 通常应在遍历处理后立即执行，因此，<code>\ListCountII</code> 这个命令应被改为：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\NewDocumentCommand</span><span class="keyword">\ListCountII</span>&#123;&gt;&#123;<span class="keyword">\SplitList</span>&#123;,&#125;&#125;m&#125;&#123;</span><br><span class="line">  <span class="keyword">\ProcessList</span>&#123;<span class="params">#1</span>&#125;<span class="keyword">\CountBridge</span>。<span class="keyword">\firstitemtrue</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里，我把遍历后末尾的句号也加上了。</p>
+<h3 id="优雅的做法"><a class="markdownIt-Anchor" href="#优雅的做法"></a> 优雅的做法</h3>
+<p>优雅的做法适合于修改 <code>\foreach</code> 的遍历循环体，利用 <code>\foreach</code> 循环变量的可选选项 <code>[count = \i]</code>，结合 <code>ifthen</code> 宏包的判断分支功能，命令<code>\ListCountI</code> 应该被修改为：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\NewDocumentCommand</span><span class="keyword">\ListCountI</span>&#123;m&#125;&#123;</span><br><span class="line">  <span class="keyword">\foreach</span> <span class="keyword">\x</span>[count=<span class="keyword">\i</span>] in &#123;简支梁桥,悬索桥,斜拉桥&#125; &#123;</span><br><span class="line">    <span class="keyword">\ifthenelse</span>&#123;<span class="keyword">\equal</span>&#123;<span class="keyword">\i</span>&#125;&#123;1&#125;&#125;&#123;<span class="keyword">\relax</span>&#125;&#123;，&#125;<span class="comment">%</span></span><br><span class="line">    <span class="keyword">\CountBridge</span>&#123;<span class="keyword">\x</span>&#125;&#125;。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样的，遍历后末尾的句号也添加上了。</p>
+<h2 id="段落前面的概括"><a class="markdownIt-Anchor" href="#段落前面的概括"></a> 段落前面的概括</h2>
+<p>至此，目标段落“其中，……”这一部分已经定义完成，目标段落前面还有一句话要概括统计的桥型，显然也可以用前面两种方法。不过，按人类语言通常习惯，在表述两个条目时我们习惯用“和”作为连词，在三个及以上条目时，我们习惯先用“、”分隔，到最后一个条目时用“和”作为连词。这个比较特殊的结构一开始我首先想到的是 <code>siunitx</code> 宏包中对数字列表的处理方法，于是去翻起了 <code>siunitx.sty</code> 的代码，这个包的代码长度甚至超过了 <code>LaTeXe</code> 的内核…… 看着一个一个嵌套的函数，对数字、单位的各种判断处理，我有些绝望了，于是翻起 LaTeX3 的手册——<code>Source3.pdf</code>，在其中发现了逗号分隔列表的处理函数，居然有非常简便的方法，那就是直接使用 <code>\clist_use:Nnnn</code> 解决问题，嗯，看来 LaTeX3 真需要系统地学一下了。解决方案的核心语句是：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\clist_set:Nn</span> <span class="keyword">\l_my_clist</span> &#123;简支梁桥,悬索桥,斜拉桥&#125;</span><br><span class="line"><span class="keyword">\clist_use:Nnnn</span> <span class="keyword">\l_my_clist</span> &#123; 和 &#125; &#123; 、 &#125; &#123; 和 &#125;</span><br></pre></td></tr></table></figure>
+<p>当然，因为使用了 LaTeX3 语法，需要 <code>\ExplSyntaxOn</code> 和 <code>\ExplSyntaxOff</code> 来开启关闭环境，从而能正确识别相应的命令。</p>
+<p>最终解决方案，完整的一个 MWE 如下：</p>
+<figure class="highlight latex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">\documentclass</span>&#123;ctexart&#125;</span><br><span class="line"><span class="keyword">\usepackage</span>&#123;pgffor,ifthen&#125; <span class="comment">% xparse 由 ctex 宏包自动载入了，不需要加载</span></span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\简</span>支梁桥数量&#123;7&#125;</span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\连</span>续梁桥数量&#123;8&#125;</span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\拱</span>桥数量&#123;5&#125;</span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\桁</span>架桥数量&#123;4&#125;</span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\斜</span>拉桥数量&#123;6&#125;</span><br><span class="line"><span class="keyword">\def</span><span class="keyword">\悬</span>索桥数量&#123;3&#125;</span><br><span class="line"><span class="keyword">\makeatletter</span></span><br><span class="line"><span class="keyword">\newcommand</span><span class="keyword">\CountBridge</span>[1]&#123;<span class="params">#1</span>的数量为<span class="keyword">\@nameuse</span>&#123;<span class="params">#1</span>数量&#125;座&#125;</span><br><span class="line"><span class="keyword">\makeatother</span></span><br><span class="line"><span class="keyword">\ExplSyntaxOn</span></span><br><span class="line"><span class="keyword">\NewDocumentCommand</span><span class="keyword">\桥</span>型调查&#123;m&#125;&#123;</span><br><span class="line">  <span class="keyword">\clist_set:Nn</span> <span class="keyword">\l_my_clist</span> &#123;<span class="params">#1</span>&#125;</span><br><span class="line">  调查的桥型包括：<span class="keyword">\clist_use:Nnnn</span> <span class="keyword">\l_my_clist</span> &#123; 和 &#125; &#123; 、 &#125; &#123; 以及 &#125;，</span><br><span class="line">  其中：<span class="keyword">\foreach</span> <span class="keyword">\x</span>[count =<span class="keyword">\i</span>] in &#123;<span class="params">#1</span>&#125; &#123;<span class="keyword">\ifthenelse</span>&#123;<span class="keyword">\equal</span>&#123;<span class="keyword">\i</span>&#125;&#123;1&#125;&#125;&#123;<span class="keyword">\relax</span>&#125;&#123;，&#125;<span class="keyword">\CountBridge</span>&#123;<span class="keyword">\x</span>&#125;&#125;。</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">\ExplSyntaxOff</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">\begin</span>&#123;document&#125;</span><br><span class="line"><span class="keyword">\桥</span>型调查&#123;简支梁桥,悬索桥,斜拉桥,拱桥,桁架桥&#125;</span><br><span class="line"><span class="keyword">\end</span>&#123;document&#125;</span><br></pre></td></tr></table></figure>
+<p>排版出来的内容为：</p>
+<blockquote>
+<p>调查的桥型包括：简支梁桥、悬索桥、斜拉桥、拱桥以及桁架桥，其中：简支梁桥的数量为 7 座，悬索桥的数量为 3 座，斜拉桥的数量为 6 座，拱桥的数量为 5 座，桁架桥的数量为 4 座。</p>
+</blockquote>
+<p>完美解决问题。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>感谢拨冗阅读本文，若有些许收获，不妨捐赠以资鼓励。</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    捐赠
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/qr-wx.png" alt="Chennan ZHANG 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/qr-ali.png" alt="Chennan ZHANG 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Chennan ZHANG
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://chennanzhang.github.io/2021/01/12/Process-of-comma-separated-list-in-LaTeX/" title="LaTeX 里逗号分隔列表的处理">http://chennanzhang.github.io/2021/01/12/Process-of-comma-separated-list-in-LaTeX/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LaTeX/" rel="tag"># LaTeX</a>
+              <a href="/tags/LaTeX3/" rel="tag"># LaTeX3</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/31/summary/" rel="prev" title="算是个总结">
+      <i class="fa fa-chevron-left"></i> 算是个总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/14/Notepad-Configuration/" rel="next" title="Notepad++作为LaTeX前端编辑器的配置">
+      Notepad++作为LaTeX前端编辑器的配置 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E6%8F%8F%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text"> 问题描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text"> 解决办法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%99%E5%AE%9A%E6%9D%A1%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text"> 给定条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E8%A7%A3%E5%86%B3%E7%AE%80%E5%8D%95%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.</span> <span class="nav-text"> 分析解决简单的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9D%A1%E7%9B%AE%E9%97%B4%E7%9A%84%E5%88%86%E9%9A%94%E9%97%AE%E9%A2%98"><span class="nav-number">2.3.</span> <span class="nav-text"> 条目间的分隔问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E4%BC%98%E9%9B%85%E7%9A%84%E5%81%9A%E6%B3%95"><span class="nav-number">2.3.1.</span> <span class="nav-text"> 不优雅的做法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E9%9B%85%E7%9A%84%E5%81%9A%E6%B3%95"><span class="nav-number">2.3.2.</span> <span class="nav-text"> 优雅的做法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AE%B5%E8%90%BD%E5%89%8D%E9%9D%A2%E7%9A%84%E6%A6%82%E6%8B%AC"><span class="nav-number">2.4.</span> <span class="nav-text"> 段落前面的概括</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Chennan ZHANG"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Chennan ZHANG</p>
+  <div class="site-description" itemprop="description">且把浮名换了浅斟低唱</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/chennanzhang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;chennanzhang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chennanzhang@gmail.com" title="E-Mail → mailto:chennanzhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1963302395" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1963302395" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chennanzhang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chennanzhang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.royblog.tk/" title="https:&#x2F;&#x2F;www.royblog.tk&#x2F;" rel="noopener" target="_blank">我的师侄</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.theswamp.org/" title="https:&#x2F;&#x2F;www.theswamp.org&#x2F;" rel="noopener" target="_blank">TheSwamp</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.lee-mac.com/index.html" title="http:&#x2F;&#x2F;www.lee-mac.com&#x2F;index.html" rel="noopener" target="_blank">Lee Mac</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.liaoxuefeng.com/" title="https:&#x2F;&#x2F;www.liaoxuefeng.com&#x2F;" rel="noopener" target="_blank">廖雪峰</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://openstd.samr.gov.cn/bzgk/gb/index" title="http:&#x2F;&#x2F;openstd.samr.gov.cn&#x2F;bzgk&#x2F;gb&#x2F;index" rel="noopener" target="_blank">国标全文公开系统</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.ccsn.org.cn/" title="http:&#x2F;&#x2F;www.ccsn.org.cn&#x2F;" rel="noopener" target="_blank">国家工程建设标准化信息网</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mohurd.gov.cn/gongkai/fdzdgknr/bzgf/index.html" title="https:&#x2F;&#x2F;www.mohurd.gov.cn&#x2F;gongkai&#x2F;fdzdgknr&#x2F;bzgf&#x2F;index.html" rel="noopener" target="_blank">建设部标准定额</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://xxgk.mot.gov.cn/2020/jigou/" title="http:&#x2F;&#x2F;xxgk.mot.gov.cn&#x2F;2020&#x2F;jigou&#x2F;" rel="noopener" target="_blank">交通部信息公开</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://std.samr.gov.cn/" title="http:&#x2F;&#x2F;std.samr.gov.cn&#x2F;" rel="noopener" target="_blank">全国标准信息公共服务平台</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://jtst.mot.gov.cn/arch/prof" title="http:&#x2F;&#x2F;jtst.mot.gov.cn&#x2F;arch&#x2F;prof" rel="noopener" target="_blank">交通运输标准化信息平台</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://zjw.sh.gov.cn/xxbz/index.html" title="http:&#x2F;&#x2F;zjw.sh.gov.cn&#x2F;xxbz&#x2F;index.html" rel="noopener" target="_blank">上海市住建委标准查询</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chennan ZHANG</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+<script type="text/javascript">
+var originalTitle = document.title;      
+var crashSwitched = false;               
+var titleTime;
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden) {
+    if (Math.random() < parseFloat(0.2)) {        
+      crashSwitched = true;              
+      document.title = '(┳Д┳) 页面崩溃啦~~' + originalTitle;     
+      clearTimeout(titleTime);
+    }
+  } else {
+    if (crashSwitched == true) {
+      crashSwitched = false;            
+      document.title = '(๑¯◡¯๑) 嘿嘿，好了~' + originalTitle;   
+      titleTime = setTimeout(function () {
+        document.title = originalTitle;  // 
+      }, 2000);
+    }
+  }
+});
+</script>
+  
+
+  
+      
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'AqUG5mY7j1UyligRzzx1F78o-gzGzoHsz',
+      appKey     : 'ApW5zdibHafiolrsvyjtrcRK',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

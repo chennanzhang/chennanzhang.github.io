@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/name.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/books.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/books.ico">
+  <link rel="mask-icon" href="/images/name.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chennanzhang.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":true,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="两天前，有道路专业的同事找我帮忙解决一个问题：  既有一个 *.dwg 文件，存储了大量片区管线资料，管线按实际位置以空间直线（LINE）而非空间多段线（POLYLINE）的形式存储，不同类型的管线分图层存储，现需要沿道路中心线按给定桩号间隔读取道路宽度范围内所有管线的标高或埋深，希望能有比较便捷的程序进行处理。  说实话，这个问题在 AutoCAD 中的解决方法并不是很困难，只是过程相对繁琐，并">
+<meta property="og:type" content="article">
+<meta property="og:title" content="道路指定桩号处管线标高查询程序的编制思路">
+<meta property="og:url" content="http://chennanzhang.github.io/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/index.html">
+<meta property="og:site_name" content="极客斋">
+<meta property="og:description" content="两天前，有道路专业的同事找我帮忙解决一个问题：  既有一个 *.dwg 文件，存储了大量片区管线资料，管线按实际位置以空间直线（LINE）而非空间多段线（POLYLINE）的形式存储，不同类型的管线分图层存储，现需要沿道路中心线按给定桩号间隔读取道路宽度范围内所有管线的标高或埋深，希望能有比较便捷的程序进行处理。  说实话，这个问题在 AutoCAD 中的解决方法并不是很困难，只是过程相对繁琐，并">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-22T06:37:26.000Z">
+<meta property="article:modified_time" content="2021-01-29T05:22:58.361Z">
+<meta property="article:author" content="Chennan ZHANG">
+<meta property="article:tag" content="AutoCAD">
+<meta property="article:tag" content="AutoLisp&#x2F;VisualLisp">
+<meta property="article:tag" content="市政道路管线">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://chennanzhang.github.io/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>道路指定桩号处管线标高查询程序的编制思路 | 极客斋</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="极客斋" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">极客斋</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+
+  <a href="https://github.com/chennanzhang" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://chennanzhang.github.io/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Chennan ZHANG">
+      <meta itemprop="description" content="且把浮名换了浅斟低唱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极客斋">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          道路指定桩号处管线标高查询程序的编制思路
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-22 14:37:26" itemprop="dateCreated datePublished" datetime="2021-01-22T14:37:26+08:00">2021-01-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-29 13:22:58" itemprop="dateModified" datetime="2021-01-29T13:22:58+08:00">2021-01-29</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8A%80%E6%9C%AF/" itemprop="url" rel="index"><span itemprop="name">计算机技术</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>两天前，有道路专业的同事找我帮忙解决一个问题：</p>
+<blockquote>
+<p>既有一个 <code>*.dwg</code> 文件，存储了大量片区管线资料，管线按实际位置以空间直线（<code>LINE</code>）而非空间多段线（<code>POLYLINE</code>）的形式存储，不同类型的管线分图层存储，现需要沿道路中心线按给定桩号间隔读取道路宽度范围内所有管线的标高或埋深，希望能有比较便捷的程序进行处理。</p>
+</blockquote>
+<p>说实话，这个问题在 AutoCAD 中的解决方法并不是很困难，只是过程相对繁琐，并且算法处理不好时，时间复杂度会比较高，如果是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 级别的时间复杂度则是不能接受的。就在我基本考虑好这个问题并准备编写代码时，<strong>需求</strong> 变了！！！用户希望自行在管线上选取一点读出管线在该位置的标高并标注在图中。这个需求大大降低了程序编制的难度（程序员碰到这种产品经理或用户真要开心死了）。当天吃完午饭后午休时间，用了二十分钟不到的时间，我写完了这段代码（主程序代码都不超过 20 行）。考虑到前面的需求已经进行了一定程度的思索，我在这里把程序编制的思路写下来，以便将来遇到类似的问题可以用得上，同时也测试一下 <code>hexo</code> 的 <code>next</code> 主题下 <code>markdown</code> 中 <code>mermaid</code> 图形生成静态网页的情况。</p>
+<span id="more"></span>
+<h1 id="程序需要解决的问题及对策"><a class="markdownIt-Anchor" href="#程序需要解决的问题及对策"></a> 程序需要解决的问题及对策</h1>
+<h2 id="道路中线与道路路面的表达"><a class="markdownIt-Anchor" href="#道路中线与道路路面的表达"></a> 道路中线与道路路面的表达</h2>
+<p>道路中心线与道路路面的表达在我自己编写的 <code>BRTools</code> 中已经有了解决办法，道路中心线用连成一体的轻量化多段线（<code>LWPOLYLINE</code>）进行表达，路面信息可以通过竖曲线扩展数据和超高扩展数据进行表达，简言之，对于给定的道路中心线，能够得到任一道路里程点切线和法线方向，加上道路竖曲线、超高信息，就能够得到路面上任一位置的高程。这里，<code>BRTools</code> 对超高的处理不是太完善，变宽路面好像没有考虑（毕竟这是十年前编写的东西，我又不是学道路专业的，真的记不清楚了），可能需要再进行一些补充。</p>
+<h2 id="与指定桩号相关的所有管线的选取"><a class="markdownIt-Anchor" href="#与指定桩号相关的所有管线的选取"></a> 与指定桩号相关的所有管线的选取</h2>
+<p>这个问题是完成整个程序编写的关键，需求变更时把这一步由用户自行选择就大大降低了问题的复杂程度。如果需求仍然是由道路桩号决定，那么就需要求取各种管线与<strong>道路里程点的法平面</strong>之交点。空间直线段与某平面的交点可以通过坐标变换的方式容易求取，假设空间直线段起终点在世界坐标系（<code>WCS</code>）中坐标表分别为变量 <code>pts</code>、<code>pte</code>，平面的法向量为 <code>normal</code>，该平面上的某点坐标变量为 <code>ptm</code>，则：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> pts (<span class="name">trans</span> pts <span class="number">0</span> normal) </span><br><span class="line">      pte (<span class="name">trans</span> pte <span class="number">0</span> normal)</span><br><span class="line">      ptm (<span class="name">trans</span> ptm <span class="number">0</span> normal))</span><br></pre></td></tr></table></figure>
+<p>则将 <code>pts</code>、<code>pte</code>、<code>ptm</code> 均转换成为以 <code>normal</code> 为法线的对象坐标系（<code>OCS</code>）坐标，若  <code>ptm</code> 的 Z 坐标介于 <code>pts</code> 与 <code>pte</code> 的 Z 坐标之间，则该线段与平面必然存在交点。容易理解但啰嗦的写法是：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">or</span> </span><br><span class="line">  (<span class="name">&lt;</span> (<span class="name">caddr</span> pts) (<span class="name">caddr</span> ptm) (<span class="name">caddr</span> pte)) </span><br><span class="line">  (<span class="name">&gt;</span> (<span class="name">caddr</span> pts) (<span class="name">caddr</span> ptm) (<span class="name">caddr</span> pte)))</span><br></pre></td></tr></table></figure>
+<p>不太容易理解但好扩展的炫技写法是：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">apply</span> &#x27;or </span><br><span class="line">  (<span class="name">mapcar</span> </span><br><span class="line">    &#x27;(lambda(x) </span><br><span class="line">      (cons x (mapcar &#x27;caddr (list pts ptm pte)))) </span><br><span class="line">    (<span class="name">list</span> &#x27;&gt; &#x27;&lt;)))</span><br></pre></td></tr></table></figure>
+<p>若上面表达式值为 <code>T</code>，则直线段与平面的交点坐标为：</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">trans</span> </span><br><span class="line">  (<span class="name">inters</span> </span><br><span class="line">    pts </span><br><span class="line">    pte </span><br><span class="line">    (<span class="name">list</span> (<span class="name">car</span> pts) (<span class="name">cadr</span> pts) (<span class="name">caddr</span> ptm)) </span><br><span class="line">    (<span class="name">list</span> (<span class="name">car</span> pte) (<span class="name">cadr</span> pte) (<span class="name">caddr</span> ptm)) </span><br><span class="line">    T) </span><br><span class="line">  normal <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>这个很好理解，就是空间直线段与其在平面上的投影的交点。</p>
+<p>目前为止，道路中心线某一里程点的法平面很容易确定，因此只需要遍历所有管线，判断其是否与法平面相交，若相交则求取交点，并结合管线的其他信息存储在一个表中。这时存在一个问题，管线的图元数量巨大，且对于某一里程点来说，大部分管线是不与道路里程点的法平面相交的，为了避免这些无意义的计算与判断，必须进行过滤选择。AutoLisp 中的 <code>ssget</code> 函数提供了很多过滤功能，其中 <code>f</code> 选项可以通过两点画线相交的方式进行过滤选择。我从前不确定这种选择方式是否在图形屏幕区以外的部分能够将图元选择上，所以一直都不常使用这种过滤方式，如今进行一下测试，即使是不在 AutoCAD 图形屏幕区范围内的图元也能够被选中，那么问题就相对简单了，只需要</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(<span class="name">setq</span> ss (<span class="name">ssget</span> <span class="string">&quot;f&quot;</span> (<span class="name">list</span> pt1 pt2) (<span class="name">list</span> (<span class="number">0</span> . <span class="string">&quot;LINE&quot;</span>) (<span class="name">cons</span> <span class="number">8</span> layer))))</span><br></pre></td></tr></table></figure>
+<p>就可以将 <code>pt1</code>、<code>pt2</code> 两点连线划中的位于 <code>layer</code> 图层的 <code>LINE</code> 图元全部选中，置于 <code>ss</code> 选择集中。<code>pt1</code> 和 <code>pt2</code> 可以考虑使用道路中心线正负法向距离为道路半宽的点。至此，程序的主要问题就解决了。</p>
+<h1 id="程序的大概框图"><a class="markdownIt-Anchor" href="#程序的大概框图"></a> 程序的大概框图</h1>
+<p>其实本文没有什么值得记录的意义，我只是想在这里尝试一下 <code>hexo</code> 的<code>next</code> 主题下 <code>markdown</code> 中的 <code>mermaid</code> 或 <code>flow</code> 图形生成静态网页的情况。现在看来，实现没有问题，需要做的事情是装两个插件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save hexo-filter-flowchart</span><br></pre></td></tr></table></figure>
+<p>以及</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-filter-mermaid-diagrams</span><br></pre></td></tr></table></figure>
+<p>这个程序的框图可以表现为：</p>
+<div id="flowchart-0" class="flow-chart"></div>
+<p>嗯，说老实话，<code>flow</code> 的效果实在是太 <strong>丑陋</strong> 了，赶明儿个用 <code>graph</code> 写写试试。<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 开始
+op1=>operation: 获取特定里程点表
+op2=>operation: 获取下一个里程点相关信息
+op3=>operation: 形成相关管线选择集
+op4=>operation: 遍历选择集，加入信息表
+cond=>condition: 里程点表是否遍历完成?
+op5=>operation: 信息标注处理
+e=>end: 结束
+
+st->op1->op2->op3->op4->cond
+cond(yes)->op5->e
+cond(no)->op2</textarea><textarea id="flowchart-0-options" style="display: none">{"scale":1,"line-width":2,"line-length":50,"text-margin":10,"font-size":12}</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>感谢拨冗阅读本文，若有些许收获，不妨捐赠以资鼓励。</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    捐赠
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/qr-wx.png" alt="Chennan ZHANG 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/qr-ali.png" alt="Chennan ZHANG 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Chennan ZHANG
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://chennanzhang.github.io/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/" title="道路指定桩号处管线标高查询程序的编制思路">http://chennanzhang.github.io/2021/01/22/Idea-of-programming-for-querying-elevation-at-certain-mileage/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AutoCAD/" rel="tag"># AutoCAD</a>
+              <a href="/tags/AutoLisp-VisualLisp/" rel="tag"># AutoLisp/VisualLisp</a>
+              <a href="/tags/%E5%B8%82%E6%94%BF%E9%81%93%E8%B7%AF%E7%AE%A1%E7%BA%BF/" rel="tag"># 市政道路管线</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/22/Method-of-mapping-characters-with-TECKit/" rel="prev" title="LaTeX 利用 TECKit 映射字符的方法">
+      <i class="fa fa-chevron-left"></i> LaTeX 利用 TECKit 映射字符的方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/25/AutoCAD2021-new-feature/" rel="next" title="AutoCAD2021新特性带来的问题">
+      AutoCAD2021新特性带来的问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E9%9C%80%E8%A6%81%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98%E5%8F%8A%E5%AF%B9%E7%AD%96"><span class="nav-number">1.</span> <span class="nav-text"> 程序需要解决的问题及对策</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%93%E8%B7%AF%E4%B8%AD%E7%BA%BF%E4%B8%8E%E9%81%93%E8%B7%AF%E8%B7%AF%E9%9D%A2%E7%9A%84%E8%A1%A8%E8%BE%BE"><span class="nav-number">1.1.</span> <span class="nav-text"> 道路中线与道路路面的表达</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8E%E6%8C%87%E5%AE%9A%E6%A1%A9%E5%8F%B7%E7%9B%B8%E5%85%B3%E7%9A%84%E6%89%80%E6%9C%89%E7%AE%A1%E7%BA%BF%E7%9A%84%E9%80%89%E5%8F%96"><span class="nav-number">1.2.</span> <span class="nav-text"> 与指定桩号相关的所有管线的选取</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%A4%A7%E6%A6%82%E6%A1%86%E5%9B%BE"><span class="nav-number">2.</span> <span class="nav-text"> 程序的大概框图</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Chennan ZHANG"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">Chennan ZHANG</p>
+  <div class="site-description" itemprop="description">且把浮名换了浅斟低唱</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/chennanzhang" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;chennanzhang" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:chennanzhang@gmail.com" title="E-Mail → mailto:chennanzhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/1963302395" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;1963302395" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/chennanzhang" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;chennanzhang" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i>Twitter</a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/zh-CN" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.royblog.tk/" title="https:&#x2F;&#x2F;www.royblog.tk&#x2F;" rel="noopener" target="_blank">我的师侄</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.theswamp.org/" title="https:&#x2F;&#x2F;www.theswamp.org&#x2F;" rel="noopener" target="_blank">TheSwamp</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.lee-mac.com/index.html" title="http:&#x2F;&#x2F;www.lee-mac.com&#x2F;index.html" rel="noopener" target="_blank">Lee Mac</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.liaoxuefeng.com/" title="https:&#x2F;&#x2F;www.liaoxuefeng.com&#x2F;" rel="noopener" target="_blank">廖雪峰</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://openstd.samr.gov.cn/bzgk/gb/index" title="http:&#x2F;&#x2F;openstd.samr.gov.cn&#x2F;bzgk&#x2F;gb&#x2F;index" rel="noopener" target="_blank">国标全文公开系统</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://www.ccsn.org.cn/" title="http:&#x2F;&#x2F;www.ccsn.org.cn&#x2F;" rel="noopener" target="_blank">国家工程建设标准化信息网</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.mohurd.gov.cn/gongkai/fdzdgknr/bzgf/index.html" title="https:&#x2F;&#x2F;www.mohurd.gov.cn&#x2F;gongkai&#x2F;fdzdgknr&#x2F;bzgf&#x2F;index.html" rel="noopener" target="_blank">建设部标准定额</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://xxgk.mot.gov.cn/2020/jigou/" title="http:&#x2F;&#x2F;xxgk.mot.gov.cn&#x2F;2020&#x2F;jigou&#x2F;" rel="noopener" target="_blank">交通部信息公开</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://std.samr.gov.cn/" title="http:&#x2F;&#x2F;std.samr.gov.cn&#x2F;" rel="noopener" target="_blank">全国标准信息公共服务平台</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://jtst.mot.gov.cn/arch/prof" title="http:&#x2F;&#x2F;jtst.mot.gov.cn&#x2F;arch&#x2F;prof" rel="noopener" target="_blank">交通运输标准化信息平台</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://zjw.sh.gov.cn/xxbz/index.html" title="http:&#x2F;&#x2F;zjw.sh.gov.cn&#x2F;xxbz&#x2F;index.html" rel="noopener" target="_blank">上海市住建委标准查询</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heartbeat"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chennan ZHANG</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+if (document.querySelectorAll('pre.mermaid').length) {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mermaid@8/dist/mermaid.min.js', () => {
+    mermaid.initialize({
+      theme    : 'forest',
+      logLevel : 3,
+      flowchart: { curve     : 'linear' },
+      gantt    : { axisFormat: '%m/%d/%Y' },
+      sequence : { actorMargin: 50 }
+    });
+  }, window.mermaid);
+}
+</script>
+
+
+
+
+<script type="text/javascript">
+var originalTitle = document.title;      
+var crashSwitched = false;               
+var titleTime;
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden) {
+    if (Math.random() < parseFloat(0.2)) {        
+      crashSwitched = true;              
+      document.title = '(┳Д┳) 页面崩溃啦~~' + originalTitle;     
+      clearTimeout(titleTime);
+    }
+  } else {
+    if (crashSwitched == true) {
+      crashSwitched = false;            
+      document.title = '(๑¯◡¯๑) 嘿嘿，好了~' + originalTitle;   
+      titleTime = setTimeout(function () {
+        document.title = originalTitle;  // 
+      }, 2000);
+    }
+  }
+});
+</script>
+  
+
+  
+      
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'AqUG5mY7j1UyligRzzx1F78o-gzGzoHsz',
+      appKey     : 'ApW5zdibHafiolrsvyjtrcRK',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
