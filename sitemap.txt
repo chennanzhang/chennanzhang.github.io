@@ -1,4 +1,4 @@
-http://chennanzhang.github.io/2023/04/07/newtest/
+http://chennanzhang.github.io/2023/04/10/latex-make-gif/
 http://chennanzhang.github.io/2021/11/01/switch-shell-escape/
 http://chennanzhang.github.io/2022/09/28/Nigam-Jennings/
 http://chennanzhang.github.io/2022/09/15/anonymous-block/
@@ -53,6 +53,8 @@ http://chennanzhang.github.io/tags/VSCode/
 http://chennanzhang.github.io/tags/%E5%B7%A5%E7%A8%8B%E5%88%B6%E5%9B%BE/
 http://chennanzhang.github.io/tags/%E4%B8%89%E8%A7%86%E5%9B%BE/
 http://chennanzhang.github.io/tags/CJK/
+http://chennanzhang.github.io/tags/animate/
+http://chennanzhang.github.io/tags/Imagemagick/
 http://chennanzhang.github.io/tags/shell-escape/
 http://chennanzhang.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%8A%80%E6%9C%AF/
 http://chennanzhang.github.io/categories/%E5%B7%A5%E4%BD%9C/
